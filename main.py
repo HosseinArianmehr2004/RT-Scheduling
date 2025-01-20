@@ -11,7 +11,11 @@ class Resource:
 
 def main():
     # Initialize all resources
-    all_resources = {"R1": Resource("R1", 10), "R2": Resource("R2", 10)}
+    all_resources = {
+        "R1": Resource("R1", 10),
+        "R2": Resource("R2", 10),
+        "Core": Resource("Core", 0),
+    }
 
     # Reading information from the file
     filename = "in.txt"
@@ -88,25 +92,66 @@ def main():
                 )
         line_index += 1
 
-    # Create some tasks
-    tasks = []
+    # Create tasks
+    tasks1 = []
+    tasks2 = []
+    tasks3 = []
+    tasks4 = []
     for task in task1:
-        tasks.append(
-            Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4], task[5])
+        tasks1.append(
+            Task(
+                name=task[0],
+                execution_time=task[1],
+                resources_needed={"R1": task[2], "R2": task[3]},
+                arrival_time=task[4],
+                destination_CPU_number=task[5],
+                period=None,
+                number_of_repeat_times=None,
+                prerequisite_task_name=None,
+            )
         )
     for task in task2:
-        tasks.append(Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4]))
-    for task in task3:
-        tasks.append(
-            Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4], task[5])
+        tasks2.append(
+            Task(
+                name=task[0],
+                execution_time=task[1],
+                resources_needed={"R1": task[2], "R2": task[3]},
+                arrival_time=task[4],
+                destination_CPU_number=None,
+                period=None,
+                number_of_repeat_times=None,
+                prerequisite_task_name=None,
+            )
         )
+    # for task in task3:
+    #     tasks3.append(
+    #         Task(
+    #             name=task[0],
+    #             execution_time=task[1],
+    #             resources_needed={"R1": task[2], "R2": task[3]},
+    #             arrival_time=task[4],
+    #             destination_CPU_number=None,
+    #             period=task[5],
+    #             number_of_repeat_times=task[5],
+    #             prerequisite_task_name=None,
+    #         )
+    #     )
     for task in task4:
-        tasks.append(
-            Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4], task[5])
+        tasks4.append(
+            Task(
+                name=task[0],
+                execution_time=task[1],
+                resources_needed={"R1": task[2], "R2": task[3]},
+                arrival_time=task[4],
+                destination_CPU_number=None,
+                period=None,
+                number_of_repeat_times=None,
+                prerequisite_task_name=task[5],
+            )
         )
 
     for time in range(10):
-        for task in tasks:
+        for task in tasks2:
             if time == task.arrival_time:
                 print(f"task name = {task.name} arrived at time: {time}")
                 subsystem2.add_task(task)
