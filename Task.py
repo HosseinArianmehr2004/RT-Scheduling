@@ -20,7 +20,7 @@ class Task:
         self.state = Task_State.READY
         self.remaining_time = execution_time
 
-    # for sub 2
+    # For sub 2
     def __init__(self, name, execution_time, resources_needed, arrival_time):
         self.name = name
         self.execution_time = execution_time
@@ -30,7 +30,7 @@ class Task:
         self.state = Task_State.READY
         self.remaining_time = execution_time
 
-    # for sub 2
+    # For sub 2
     def __lt__(self, other):
         return self.remaining_time < other.remaining_time
 

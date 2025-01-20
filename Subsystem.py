@@ -2,7 +2,7 @@ import heapq
 from Task import *
 
 
-# for sub 1 and 3
+# For sub 1 and 3
 # class Core:
 #     def __init__(self, core_id, ready_queue):
 #         self.core_id = core_id
@@ -29,7 +29,7 @@ from Task import *
 #                     self.assign_task(next_task)
 
 
-# for sub 2
+# For sub 2
 class Core:
     def __init__(self, core_id, ready_queue):
         self.core_id = core_id

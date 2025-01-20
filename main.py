@@ -10,32 +10,100 @@ class Resource:
 
 
 def main():
-    # Initialize resources
-    resources = {"R1": Resource("R1", 10), "R2": Resource("R2", 10)}
+    # Initialize all resources
+    all_resources = {"R1": Resource("R1", 10), "R2": Resource("R2", 10)}
+
+    # Reading information from the file
+    filename = "in.txt"
+    lines = []
+    with open(filename, "r") as file:
+        lines = file.readlines()
+
+    # Getting the number of subsystem resources from file
+    resources = []
+    for line in lines[:4]:
+        split_values = line.split()
+        resources.extend(split_values)
 
     # Initialize subsystems
-    # subsystem1 = Subsystem(1, 3, resources)
-    subsystem2 = Subsystem_2(2, 2, resources)
-    # subsystem3 = Subsystem(3, 1, resources)
-    # subsystem4 = Subsystem(4, 2, resources)
+    # subsystem1 = Subsystem_1(int(resources[0]), int(resources[1]), all_resources)
+    subsystem2 = Subsystem_2(int(resources[2]), int(resources[3]), all_resources)
+    # subsystem3 = Subsystem_3(int(resources[4]), int(resources[5]), all_resources)
+    # subsystem4 = Subsystem_4(int(resources[6]), int(resources[7]), all_resources)
+
+    # Getting tasks from the file
+    count = 0
+    line_index = 4
+    task1 = []
+    task2 = []
+    task3 = []
+    task4 = []
+    while count < 4:
+        line = lines[line_index].split()
+        if line[0] == "$":
+            count += 1
+        else:
+            if count == 0:
+                task1.append(
+                    [
+                        line[0],
+                        int(line[1]),
+                        int(line[2]),
+                        int(line[3]),
+                        int(line[4]),
+                        int(line[5]),
+                    ]
+                )
+            elif count == 1:
+                task2.append(
+                    [
+                        line[0],
+                        int(line[1]),
+                        int(line[2]),
+                        int(line[3]),
+                        int(line[4]),
+                    ]
+                )
+            elif count == 2:
+                task3.append(
+                    [
+                        line[0],
+                        int(line[1]),
+                        int(line[2]),
+                        int(line[3]),
+                        int(line[4]),
+                        int(line[5]),
+                    ]
+                )
+            elif count == 3:
+                task4.append(
+                    [
+                        line[0],
+                        int(line[1]),
+                        int(line[2]),
+                        int(line[3]),
+                        int(line[4]),
+                        line[5],
+                    ]
+                )
+        line_index += 1
 
     # Create some tasks
-    # tasks = [
-    #     Task("T11", 4, {"R1": 1}, 0, 0, 1),
-    #     Task("T12", 10, {"R2": 1}, 0, 0, 2),
-    #     Task("T13", 20, {"R1": 2}, 0, 0, 3),
-    #     Task("T21", 4, {"R1": 2, "R2": 3}, 5, 0, 1),
-    #     Task("T31", 2, {"R1": 2, "R2": 3}, 10, 0, 1),
-    #     Task("T41", 2, {"R1": 2, "R2": 3}, 5, 0, 1),
-    #     Task("T42", 4, {"R1": 2, "R2": 2}, 7, 0, 2),
-    # ]
-
-    tasks = [
-        Task("T1", 4, {"R1": 1}, 0),
-        Task("T2", 6, {"R2": 1}, 1),
-        Task("T3", 8, {"R1": 2}, 1),
-        Task("T4", 3, {"R1": 2, "R2": 3}, 2),
-    ]
+    tasks = []
+    for task in task1:
+        tasks.append(
+            Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4], task[5])
+        )
+    for task in task2:
+        tasks.append(Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4]))
+    for task in task3:
+        tasks.append(
+            Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4], task[5])
+        )
+    for task in task4:
+        tasks.append(
+            Task(task[0], task[1], {"R1": task[2], "R2": task[3]}, task[4], task[5])
+        )
 
     for time in range(10):
         for task in tasks:
