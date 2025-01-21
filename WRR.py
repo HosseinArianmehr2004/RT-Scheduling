@@ -1,25 +1,43 @@
-class WeightedRoundRobin:
-    def __init__(self, servers):
-        self.servers = servers
-        self.max_weight = max(weight for _, weight in servers)
-        self.current_index = -1
-        self.current_weight = 0
+import os
 
-    def get_next_server(self):
-        while True:
-            self.current_index = (self.current_index + 1) % len(self.servers)
-            if self.current_index == 0:
-                self.current_weight = self.current_weight - 1
-                if self.current_weight <= 0:
-                    self.current_weight = self.max_weight
-            server, weight = self.servers[self.current_index]
-            if weight >= self.current_weight:
-                return server
 
-# مثال استفاده
-servers = [("Server A", 3), ("Server B", 2), ("Server C", 1)]
-wrr = WeightedRoundRobin(servers)
+def generate_html_from_logs():
+    log_files = [
+        "subsystem1_log.txt",
+        "subsystem2_log.txt",
+        "subsystem3_log.txt",
+        "subsystem4_log.txt",
+        "time_0.txt",  # می‌توانید این را برای فایل‌های زمان دیگر نیز اضافه کنید
+        "time_1.txt",
+        "time_2.txt",
+        "time_3.txt",
+        "time_4.txt",
+        "time_5.txt",
+        "time_6.txt",
+        "time_7.txt",
+        "time_8.txt",
+        "time_9.txt",
+    ]
 
-# درخواست‌ها را به صورت چرخشی با وزن توزیع می‌کنیم
-for _ in range(10):
-    print(wrr.get_next_server())
+    # Create HTML file to log output
+    with open("./output/simulation_output.html", "w") as html_file:
+        html_file.write("<html><head><title>Simulation Output</title></head><body>")
+        html_file.write("<h1>Task Scheduler Output</h1>")
+
+        for log_file in log_files:
+            file_path = os.path.join("./output", log_file)
+            if os.path.exists(file_path):
+                html_file.write(f"<h2>{log_file}</h2>")
+                html_file.write("<ul>")
+                with open(file_path, "r") as f:
+                    for line in f:
+                        html_file.write(f"<li>{line.strip()}</li>")
+                html_file.write("</ul>")
+            else:
+                html_file.write(f"<h2>{log_file} not found!</h2>")
+
+        html_file.write("</body></html>")
+
+
+if __name__ == "__main__":
+    generate_html_from_logs()
