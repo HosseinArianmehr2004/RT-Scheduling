@@ -1,0 +1,143 @@
+T11 arrived at time: 0
+T12 arrived at time: 0
+T13 arrived at time: 0
+Time: 0
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: T11
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 1
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: T11
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 2
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: T11
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 3
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 4
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 5
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 6
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 7
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 8
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+Time: 9
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: idle
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+

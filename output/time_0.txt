@@ -1,0 +1,44 @@
+Time: 0
+
+T11 arrived at time: 0
+T12 arrived at time: 0
+T13 arrived at time: 0
+T21 arrived at time: 0
+SubSubsystem 1:
+        Resources: R1: 0 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: T11
+                Ready Queue: []
+        Core2:
+                Running Task: T12
+                Ready Queue: []
+        Core3:
+                Running Task: T13
+                Ready Queue: []
+
+SubSubsystem 2:
+        Resources: R1: 2 R2: 2
+        Ready Queue: []
+        Core1:
+                Running Task: T21, remaining time: 3
+        Core2:
+                Running Task: idle, remaining time: -
+
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+SubSubsystem 4:
+        Resources: R1: 2 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+        Core2:
+                Running Task: idle
+                Ready Queue: []
+

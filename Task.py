@@ -8,18 +8,6 @@ class Task_State(Enum):
 
 
 class Task:
-    # def __init__(
-    #     self, name, execution_time, resources_needed, period, deadline, priority
-    # ):
-    #     self.name = name
-    #     self.execution_time = execution_time
-    #     self.resources_needed = resources_needed
-    #     self.period = period
-    #     self.deadline = deadline
-    #     self.priority = priority
-    #     self.state = Task_State.READY
-    #     self.remaining_time = execution_time
-
     def __init__(
         self,
         name,

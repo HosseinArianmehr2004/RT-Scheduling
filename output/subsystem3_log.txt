@@ -1,0 +1,81 @@
+Time: 0
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 1
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 2
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 3
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+T31 arrived at time: 4
+Time: 4
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 5
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 6
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 7
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 8
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+
+Time: 9
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: idle
+                Ready Queue: []
+

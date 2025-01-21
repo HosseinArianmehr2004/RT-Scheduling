@@ -1,79 +1,20 @@
 import heapq
 from Task import *
-
-
-# For sub 1 and 3
-# class Core:
-#     def __init__(self, core_id, ready_queue):
-#         self.core_id = core_id
-#         self.current_task = None
-#         # self.ready_queue = []
-#         self.ready_queue = ready_queue
-
-#     def assign_task(self, task):
-#         if self.current_task is None:
-#             self.current_task = task
-#             task.state = Task_State.RUNNING
-#         else:
-#             heapq.heappush(self.ready_queue, task)
-#             task.state = Task_State.READY
-
-#     def execute(self):
-#         if self.current_task is not None:
-#             self.current_task.remaining_time -= 1
-#             if self.current_task.remaining_time == 0:
-#                 self.current_task.state = Task_State.READY
-#                 self.current_task = None
-#                 if self.ready_queue:
-#                     next_task = heapq.heappop(self.ready_queue)
-#                     self.assign_task(next_task)
-
-
-# For sub 2
-class Core:
-    def __init__(self, core_id, ready_queue):
-        self.core_id = core_id
-        self.current_task = None
-        # self.ready_queue = []
-        self.ready_queue = ready_queue
-
-    def assign_task(self):
-        if self.current_task is None:
-            self.current_task = heapq.heappop(self.ready_queue)
-            self.current_task.state = Task_State.RUNNING
-        else:
-            print(f"Task {self.current_task.name} preemped")
-            self.current_task.state = Task_State.READY
-            heapq.heappush(self.ready_queue, self.current_task)
-            self.current_task = heapq.heappop(self.ready_queue)
-            self.current_task.state = Task_State.RUNNING
-            print(f"Task {self.current_task.name} assigned to CPU")
-
-    def execute(self):
-        if self.current_task is not None:
-            self.current_task.remaining_time -= 1
-            if self.current_task.remaining_time == 0:
-                self.current_task.state = Task_State.READY
-                self.current_task = None
-                if len(self.ready_queue) > 0:
-                    self.assign_task()
+from Core import *
 
 
 class Subsystem:
-    def __init__(self, subsystem_id, num_cores, resources):
-        self.subsystem_id = subsystem_id
+    def __init__(self, id, resources):
+        self.id = id
         self.resources = resources
         self.ready_queue = []
-        # self.waiting_queue = []
-        self.cores = [Core(i, self.ready_queue) for i in range(num_cores)]
 
     def release_resources(self, task):
         for resource, needed in task.resources_needed.items():
             self.resources[resource].available_units += needed
 
-    def get_status(self, time):
-        status = f"Time: {time}\n"
-        status = f"Sub{self.subsystem_id}:\n"
+    def get_status(self):
+        status = f"Sub{self.id}:\n"
         status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
         status += (
             f"        Waiting Queue {[task.name for task in self.waiting_queue]}\n"
@@ -102,22 +43,44 @@ class Subsystem:
                 core.assign_task(task)
                 self.waiting_queue.remove(task)
 
+    # def add_task(self, task):
+    #     if self.allocate_resources(task):
+    #         core = self.select_core()
+    #         core.assign_task(task)
+    #     else:
+    #         self.waiting_queue.append(task)
+    #         task.state = Task_State.WAITING
+
+    def add_task(self, task):
+        pass
+
+
+class Subsystem_1(Subsystem):
+    def __init__(self, id, num_cores, resources):
+        super().__init__(id, resources)
+        self.waiting_queue = []
+        self.cores = [Core_1(i) for i in range(num_cores)]
+
     def add_task(self, task):
         if self.allocate_resources(task):
-            core = self.select_core()
+            core = self.select_core(task)
             core.assign_task(task)
         else:
             self.waiting_queue.append(task)
             task.state = Task_State.WAITING
 
-    def select_core(self):
-        return self.cores[0]  # Simple core selection, can be improved
+    def select_core(self, task):
+        return self.cores[task.destination_CPU_number - 1]
 
 
 class Subsystem_2(Subsystem):
-    def get_status(self, time):
-        status = f"Time: {time}\n"
-        status += f"Sub{self.subsystem_id}:\n"
+    def __init__(self, id, num_cores, resources):
+        super().__init__(id, resources)
+        self.waiting_queue = []
+        self.cores = [Core_2(i, self.ready_queue) for i in range(num_cores)]
+
+    def get_status(self):
+        status = f"Sub{self.id}:\n"
         status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
         status += f"        Ready Queue: {[task.name for task in self.ready_queue]}\n"
         for core in self.cores:
@@ -142,3 +105,17 @@ class Subsystem_2(Subsystem):
                     or core.current_task.remaining_time > task.execution_time
                 ):
                     core.assign_task()
+
+
+class Subsystem_3(Subsystem):
+    def __init__(self, id, num_cores, resources):
+        super().__init__(id, resources)
+        self.waiting_queue = []
+        self.cores = [Core_3(i) for i in range(num_cores)]
+
+
+class Subsystem_4(Subsystem):
+    def __init__(self, id, num_cores, resources):
+        super().__init__(id, resources)
+        self.waiting_queue = []
+        self.cores = [Core_4(i, self.ready_queue) for i in range(num_cores)]
