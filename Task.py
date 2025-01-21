@@ -5,6 +5,7 @@ class Task_State(Enum):
     READY = 1
     WAITING = 2
     RUNNING = 3
+    COMPLETED = 4
 
 
 class Task:
@@ -31,6 +32,8 @@ class Task:
 
         self.state = Task_State.READY
         self.remaining_time = execution_time
+
+        self.remaining_quantum = None
 
     # For sub 2
     def __lt__(self, other):

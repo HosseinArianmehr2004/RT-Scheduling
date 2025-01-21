@@ -1,5 +1,7 @@
 from Subsystem import *
 from Task import *
+import tkinter as tk
+from tkinter import scrolledtext
 
 
 class Resource:
@@ -9,7 +11,20 @@ class Resource:
         self.available_units = total_units
 
 
-def main():
+class GUI(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Task Scheduler Output")
+        self.geometry("1500x800")
+        self.text_area = scrolledtext.ScrolledText(self, wrap=tk.WORD)
+        self.text_area.pack(expand=True, fill="both")
+
+    def log_output(self, message):
+        self.text_area.insert(tk.END, message + "\n")
+        self.text_area.see(tk.END)
+
+
+def run_simulation(gui):
     # Reading information from the file
     filename = "in.txt"
     lines = []
@@ -188,33 +203,41 @@ def main():
             # Check for task arrivals for each subsystem and log them
             for task in tasks1:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    message = f"{task.name} arrived at time: {time}"
+                    gui.log_output(message)  # Log to GUI
+                    time_file.write(message + "\n")
                     subsystem1.add_task(task)
-                    subsystem_files[1].write(f"{task.name} arrived at time: {time}\n")
+                    subsystem_files[1].write(message + "\n")
 
             for task in tasks2:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    message = f"{task.name} arrived at time: {time}"
+                    gui.log_output(message)  # Log to GUI
+                    time_file.write(message + "\n")
                     subsystem2.add_task(task)
-                    subsystem_files[2].write(f"{task.name} arrived at time: {time}\n")
+                    subsystem_files[2].write(message + "\n")
 
             for task in tasks3:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    message = f"{task.name} arrived at time: {time}"
+                    gui.log_output(message)  # Log to GUI
+                    time_file.write(message + "\n")
                     subsystem3.add_task(task)
-                    subsystem_files[3].write(f"{task.name} arrived at time: {time}\n")
+                    subsystem_files[3].write(message + "\n")
 
             for task in tasks4:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    message = f"{task.name} arrived at time: {time}"
+                    gui.log_output(message)  # Log to GUI
+                    time_file.write(message + "\n")
                     subsystem4.add_task(task)
-                    subsystem_files[4].write(f"{task.name} arrived at time: {time}\n")
+                    subsystem_files[4].write(message + "\n")
 
             # Execute tasks in each subsystem
-            subsystem1.execute(time)
-            subsystem2.execute(time)
-            subsystem3.execute(time)
-            subsystem4.execute(time)
+            subsystem1.execute()
+            subsystem2.execute()
+            subsystem3.execute()
+            subsystem4.execute()
 
             # Log the status of each subsystem in the respective files
             subsystem_status = {
@@ -226,15 +249,14 @@ def main():
 
             for i in range(1, 5):
                 status_info = str(subsystem_status[i])
+                gui.log_output(status_info)  # Log to GUI
                 time_file.write(f"{status_info}\n")
-                subsystem_files[i].write(
-                    f"Time: {time}\n{status_info}\n"
-                )
+                subsystem_files[i].write(f"Time: {time}\n{status_info}\n")
 
-            # Add a visual separator in the file
+            # # Add a visual separator in the file
             # file.write("* " * 80 + "\n")
 
-            # Optionally log the ready queue for subsystem 2
+            # # Optionally log the ready queue for subsystem 2
             # for t in subsystem2.ready_queue:
             #     file.write(
             #         f"Task name: {t.name}, execution time: {t.execution_time}, remaining_time: {t.remaining_time}\n"
@@ -244,6 +266,12 @@ def main():
     # Close all subsystem log files
     for file in subsystem_files.values():
         file.close()
+
+
+def main():
+    gui = GUI()  # Create the GUI application instance
+    gui.after(100, run_simulation, gui)  # Run the simulation after the GUI initializes
+    gui.mainloop()
 
 
 if __name__ == "__main__":

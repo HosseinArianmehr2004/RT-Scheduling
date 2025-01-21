@@ -1,143 +1,146 @@
 T11 arrived at time: 0
 T12 arrived at time: 0
-T13 arrived at time: 0
 Time: 0
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
+        Resources: R1: 2 R2: 2
         Waiting Queue []
         Core1:
-                Running Task: T11
-                Ready Queue: []
+                Running Task: T11, remaining time: 4, remaining quantum: 1
+                Ready Queue: ['T12']
         Core2:
-                Running Task: T12
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
+T13 arrived at time: 1
 Time: 1
 SubSubsystem 1:
         Resources: R1: 0 R2: 2
         Waiting Queue []
         Core1:
-                Running Task: T11
-                Ready Queue: []
+                Running Task: T12, remaining time: 8, remaining quantum: 2
+                Ready Queue: ['T13', 'T11']
         Core2:
-                Running Task: T12
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
+T14 arrived at time: 2
+T15 arrived at time: 2
 Time: 2
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14']
         Core1:
-                Running Task: T11
-                Ready Queue: []
+                Running Task: T12, remaining time: 7, remaining quantum: 1
+                Ready Queue: ['T13', 'T11']
         Core2:
-                Running Task: T12
+                Running Task: T15, remaining time: 9, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
+T16 arrived at time: 3
 Time: 3
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: idle
-                Ready Queue: []
+                Running Task: T13, remaining time: 9, remaining quantum: 2
+                Ready Queue: ['T11', 'T12']
         Core2:
-                Running Task: T12
+                Running Task: T15, remaining time: 8, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
 Time: 4
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: idle
-                Ready Queue: []
+                Running Task: T13, remaining time: 8, remaining quantum: 1
+                Ready Queue: ['T11', 'T12']
         Core2:
-                Running Task: T12
+                Running Task: T15, remaining time: 7, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
 Time: 5
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: idle
-                Ready Queue: []
+                Running Task: T11, remaining time: 3, remaining quantum: 1
+                Ready Queue: ['T12', 'T13']
         Core2:
-                Running Task: T12
+                Running Task: T15, remaining time: 6, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
 Time: 6
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: idle
-                Ready Queue: []
+                Running Task: T12, remaining time: 6, remaining quantum: 2
+                Ready Queue: ['T13', 'T11']
         Core2:
-                Running Task: T12
+                Running Task: T15, remaining time: 5, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
 Time: 7
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: idle
-                Ready Queue: []
+                Running Task: T12, remaining time: 5, remaining quantum: 1
+                Ready Queue: ['T13', 'T11']
         Core2:
-                Running Task: T12
+                Running Task: T15, remaining time: 4, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
 Time: 8
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: idle
-                Ready Queue: []
+                Running Task: T13, remaining time: 7, remaining quantum: 2
+                Ready Queue: ['T11', 'T12']
         Core2:
-                Running Task: T12
+                Running Task: T15, remaining time: 3, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
 Time: 9
 SubSubsystem 1:
-        Resources: R1: 0 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 1
+        Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: idle
-                Ready Queue: []
+                Running Task: T13, remaining time: 6, remaining quantum: 1
+                Ready Queue: ['T11', 'T12']
         Core2:
-                Running Task: idle
+                Running Task: T15, remaining time: 2, remaining quantum: 1
                 Ready Queue: []
         Core3:
-                Running Task: T13
+                Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
