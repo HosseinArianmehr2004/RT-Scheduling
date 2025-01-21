@@ -79,3 +79,43 @@ SubSubsystem 3:
                 Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
+Time: 10
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 11
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 12
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 13
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 14
+SubSubsystem 3:
+        Resources: R1: 4 R2: 10
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+

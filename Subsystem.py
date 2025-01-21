@@ -29,6 +29,7 @@ class Subsystem:
                 return False
         for resource, needed in task.resources_needed.items():
             self.resources[resource].available_units -= needed
+        task.has_all_resources = True
         return True
 
     def release_resources(self, task):
@@ -82,7 +83,7 @@ class Subsystem_1(Subsystem):
 class Subsystem_2(Subsystem):
     def __init__(self, id, num_cores, resources):
         super().__init__(id, resources)
-        self.waiting_queue = []
+        # self.waiting_queue = []
         self.cores = [Core_2(i, self) for i in range(num_cores)]
 
     def get_status(self):
@@ -91,7 +92,7 @@ class Subsystem_2(Subsystem):
         status += f"        Ready Queue: {[task.name for task in self.ready_queue]}\n"
         for core in self.cores:
             status += f"        Core{core.core_id + 1}:\n"
-            status += f"                Running Task: {core.current_task.name if core.current_task else 'idle'}"
+            status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
             status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}\n"
         return status
 
@@ -99,18 +100,46 @@ class Subsystem_2(Subsystem):
         for core in self.cores:
             core.execute(time)
 
+    # def add_task(self, task):
+    #     task.state = Task_State.READY
+    #     heapq.heappush(self.ready_queue, task)
+
+    #     for core in self.cores:
+    #         if len(self.ready_queue) > 0:
+    #             if core.current_task is None:
+    #                 core.assign_task()
+    #             elif core.current_task.remaining_time > task.execution_time:
+    #                 bool = False
+    #                 for core2 in self.cores:
+    #                     if core2.current_task is None:
+    #                         core2.assign_task
+    #                         bool = True
+    #                 if bool == False:
+    #                     core.assign_task()
+
     def add_task(self, task):
         task.state = Task_State.READY
         heapq.heappush(self.ready_queue, task)
 
+        # for core in self.cores:
+        #     if len(self.ready_queue) > 0:
+        #         if (
+        #             core.current_task is None
+        #             or core.current_task.remaining_time > task.execution_time
+        #         ):
+        #             core.assign_task()
+        assigned = False
         for core in self.cores:
-            # if core.current_task is None and len(self.ready_queue) > 0:
-            if len(self.ready_queue) > 0:
-                if (
-                    core.current_task is None
-                    or core.current_task.remaining_time > task.execution_time
-                ):
+            if self.ready_queue:
+                if core.current_task is None:
                     core.assign_task()
+                    assigned = True
+        if not assigned:
+            for core in self.cores:
+                if self.ready_queue:
+                    if core.current_task.remaining_time > task.execution_time:
+                        core.assign_task()
+                        assigned = False
 
 
 class Subsystem_3(Subsystem):

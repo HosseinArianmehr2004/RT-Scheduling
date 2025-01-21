@@ -1,26 +1,25 @@
-Time: 5
+Time: 10
 
-T41 arrived at time: 5
 SubSubsystem 1:
         Resources: R1: 0 R2: 1
         Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: T13, remaining time: 7, remaining quantum: 1
+                Running Task: T13, remaining time: 5, remaining quantum: 1
                 Ready Queue: ['T11', 'T12']
         Core2:
-                Running Task: T15, remaining time: 6, remaining quantum: 1
+                Running Task: T15, remaining time: 1, remaining quantum: 1
                 Ready Queue: []
         Core3:
                 Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
 SubSubsystem 2:
-        Resources: R1: 3 R2: 2
+        Resources: R1: 4 R2: 4
         Ready Queue: []
         Core1:
-                Running Task: T24, remaining time: 1
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: T23, remaining time: 5
+                Running Task: ---, remaining time: -
 
 SubSubsystem 3:
         Resources: R1: 4 R2: 10

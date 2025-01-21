@@ -4,7 +4,7 @@ SubSubsystem 1:
         Resources: R1: 0 R2: 1
         Waiting Queue ['T14', 'T16']
         Core1:
-                Running Task: T13, remaining time: 6, remaining quantum: 1
+                Running Task: T13, remaining time: 6, remaining quantum: 2
                 Ready Queue: ['T11', 'T12']
         Core2:
                 Running Task: T15, remaining time: 2, remaining quantum: 1
@@ -14,12 +14,12 @@ SubSubsystem 1:
                 Ready Queue: []
 
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 4 R2: 3
         Ready Queue: []
         Core1:
-                Running Task: idle, remaining time: -
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: T23, remaining time: 3
+                Running Task: T23, remaining time: 1
 
 SubSubsystem 3:
         Resources: R1: 4 R2: 10

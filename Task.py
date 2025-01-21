@@ -33,6 +33,7 @@ class Task:
         self.state = Task_State.READY
         self.remaining_time = execution_time
 
+        self.has_all_resources = False
         self.remaining_quantum = None
 
     # For sub 2

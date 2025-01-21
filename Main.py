@@ -180,7 +180,7 @@ def main():
     }
 
     # Main simulation loop
-    for time in range(10):
+    for time in range(15):
         # Create a new file for the current time unit
         with open(f"./output/time_{time}.txt", "w") as time_file:
             time_file.write(f"Time: {time}\n\n")
@@ -227,9 +227,7 @@ def main():
             for i in range(1, 5):
                 status_info = str(subsystem_status[i])
                 time_file.write(f"{status_info}\n")
-                subsystem_files[i].write(
-                    f"Time: {time}\n{status_info}\n"
-                )
+                subsystem_files[i].write(f"Time: {time}\n{status_info}\n")
 
             # Add a visual separator in the file
             # file.write("* " * 80 + "\n")

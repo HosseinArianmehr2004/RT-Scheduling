@@ -39,9 +39,9 @@ class Core_1(Core):
                 task.remaining_quantum = 1
             else:
                 task.remaining_quantum = task.execution_time // self.min_execution_time
-            print(
-                f"::: {task.name}, q: {task.remaining_quantum}, min_execution_time: {self.min_execution_time}"
-            )
+            # print(
+            #     f"::: {task.name}, q: {task.remaining_quantum}, min_execution_time: {self.min_execution_time}"
+            # )
 
         if self.current_task is None:
             task.state = Task_State.RUNNING
@@ -65,16 +65,16 @@ class Core_1(Core):
         if self.current_task is not None:
             task = self.current_task
             task.remaining_quantum = task.execution_time // self.min_execution_time
-            print(f"{task.name} remaining_quantum = {task.remaining_quantum}")
+            # print(f"{task.name} remaining_quantum = {task.remaining_quantum}")
         for task in self.ready_queue:
             task.remaining_quantum = task.execution_time // self.min_execution_time
-            print(f"{task.name} remaining_quantum = {task.remaining_quantum}")
+            # print(f"{task.name} remaining_quantum = {task.remaining_quantum}")
 
     def execute(self, time):
         if time % 5 == 0:
             self.determine_min_execution_time()
-            print(f"\nTime: {time}")
-            print(f"min execution time: {self.min_execution_time}")
+            # print(f"\nTime: {time}")
+            # print(f"min execution time: {self.min_execution_time}")
             self.set_tasks_quantum()
 
         if self.current_task is not None:
@@ -113,24 +113,43 @@ class Core_2(Core):
         self.ready_queue = subsystem.ready_queue
 
     def assign_task(self):
-        if self.current_task is None:
-            self.current_task = heapq.heappop(self.ready_queue)
-            self.current_task.state = Task_State.RUNNING
+        task = heapq.heappop(self.ready_queue)
+        if task.has_all_resources == False:
+            if self.subsystem.allocate_resources(task):
+                if self.current_task is None:
+                    self.current_task = task
+                    self.current_task.state = Task_State.RUNNING
+                else:
+                    print(f"Task {self.current_task.name} preemped")
+                    self.current_task.state = Task_State.READY
+                    heapq.heappush(self.ready_queue, self.current_task)
+                    self.current_task = task
+                    self.current_task.state = Task_State.RUNNING
+                    print(f"Task {self.current_task.name} assigned to CPU")
+            else:
+                heapq.heappush(self.ready_queue, task)
+                print("\nThere is not enough resources\n")
         else:
-            print(f"Task {self.current_task.name} preemped")
-            self.current_task.state = Task_State.READY
-            heapq.heappush(self.ready_queue, self.current_task)
-            self.current_task = heapq.heappop(self.ready_queue)
-            self.current_task.state = Task_State.RUNNING
-            print(f"Task {self.current_task.name} assigned to CPU")
+            if self.current_task is None:
+                self.current_task = task
+                self.current_task.state = Task_State.RUNNING
+            else:
+                print(f"Task {self.current_task.name} preemped")
+                self.current_task.state = Task_State.READY
+                heapq.heappush(self.ready_queue, self.current_task)
+                self.current_task = task
+                self.current_task.state = Task_State.RUNNING
+                print(f"Task {self.current_task.name} assigned to CPU")
 
     def execute(self, time):
         if self.current_task is not None:
-            self.current_task.remaining_time -= 1
+            if time - self.current_task.arrival_time != 0:
+                self.current_task.remaining_time -= 1
             if self.current_task.remaining_time == 0:
-                self.current_task.state = (
-                    Task_State.READY
-                )  # this has to be COMPLETED not READY
+                self.current_task.state = Task_State.COMPLETED
+                self.subsystem.release_resources(self.current_task)
+                print(self.current_task.resources_needed)
+
                 self.current_task = None
                 if len(self.ready_queue) > 0:
                     self.assign_task()

@@ -22,7 +22,7 @@ SubSubsystem 2:
         Core1:
                 Running Task: T21, remaining time: 2
         Core2:
-                Running Task: T22, remaining time: 5
+                Running Task: T22, remaining time: 4
 
 SubSubsystem 3:
         Resources: R1: 4 R2: 10

@@ -110,3 +110,58 @@ SubSubsystem 4:
                 Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
+Time: 10
+SubSubsystem 4:
+        Resources: R1: 2 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+        Core2:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 11
+SubSubsystem 4:
+        Resources: R1: 2 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+        Core2:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 12
+SubSubsystem 4:
+        Resources: R1: 2 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+        Core2:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 13
+SubSubsystem 4:
+        Resources: R1: 2 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+        Core2:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
+Time: 14
+SubSubsystem 4:
+        Resources: R1: 2 R2: 2
+        Waiting Queue []
+        Core1:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+        Core2:
+                Running Task: ---, remaining time: -, remaining quantum: -
+                Ready Queue: []
+
