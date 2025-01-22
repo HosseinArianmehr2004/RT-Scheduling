@@ -9,6 +9,9 @@ class Subsystem:
         self.resources = resources
         self.ready_queue = []
 
+        self.file = None
+        self.time = None
+
     def get_status(self):
         status = f"Sub{self.id}:\n"
         status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
@@ -16,7 +19,7 @@ class Subsystem:
             f"        Waiting Queue {[task.name for task in self.waiting_queue]}\n"
         )
         for core in self.cores:
-            status += f"        Core{core.core_id + 1}:\n"
+            status += f"        Core{core.id}:\n"
             status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
             status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}"
             status += f", remaining quantum: {core.current_task.remaining_quantum if core.current_task else '-'}\n"
@@ -36,8 +39,14 @@ class Subsystem:
         for resource, needed in task.resources_needed.items():
             self.resources[resource].available_units += needed
 
-    def execute(self, time):
+    def execute(self):
         pass
+
+    def set_file(self, file):
+        self.file = file
+
+    def set_time(self, time):
+        self.time = time
 
     # def add_task(self, task):
     #     if self.allocate_resources(task):
@@ -57,9 +66,36 @@ class Subsystem_1(Subsystem):
         self.waiting_queue = []
         self.cores = [Core_1(i, self) for i in range(num_cores)]
 
-    def execute(self, time):
+    def load_balancing(self):
+        # Identify underloaded and overloaded cores
+        underloaded_cores = [
+            core
+            for core in self.cores
+            if not core.ready_queue and core.current_task is None
+        ]
+        overloaded_cores = [core for core in self.cores if len(core.ready_queue) > 1]
+
+        # Perform pull migration
+        for underloaded_core in underloaded_cores:
+            for overloaded_core in overloaded_cores:
+                if overloaded_core.ready_queue:
+                    # Transfer a task from the overloaded core to the underloaded core
+                    task = (
+                        overloaded_core.ready_queue.pop()
+                    )  # Take the last task from the ready queue
+                    underloaded_core.assign_task(task)
+                    task.state = Task_State.READY  # Update the task state
+                    self.file.write(
+                        f"{task.name} migrated from Core {overloaded_core.id} to Core {underloaded_core.id}\n"
+                    )
+                    break  # Move to the next underloaded core after transferring one task
+
+    def execute(self):
         for core in self.cores:
-            core.execute(time)
+            core.execute()
+
+        if self.time % 4 == 0:
+            self.load_balancing()
 
         # Check waiting queue and try to assign tasks
         for task in self.waiting_queue[:]:
@@ -83,7 +119,6 @@ class Subsystem_1(Subsystem):
 class Subsystem_2(Subsystem):
     def __init__(self, id, num_cores, resources):
         super().__init__(id, resources)
-        # self.waiting_queue = []
         self.cores = [Core_2(i, self) for i in range(num_cores)]
 
     def get_status(self):
@@ -91,31 +126,14 @@ class Subsystem_2(Subsystem):
         status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
         status += f"        Ready Queue: {[task.name for task in self.ready_queue]}\n"
         for core in self.cores:
-            status += f"        Core{core.core_id + 1}:\n"
+            status += f"        Core{core.id}:\n"
             status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
             status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}\n"
         return status
 
-    def execute(self, time):
+    def execute(self):
         for core in self.cores:
-            core.execute(time)
-
-    # def add_task(self, task):
-    #     task.state = Task_State.READY
-    #     heapq.heappush(self.ready_queue, task)
-
-    #     for core in self.cores:
-    #         if len(self.ready_queue) > 0:
-    #             if core.current_task is None:
-    #                 core.assign_task()
-    #             elif core.current_task.remaining_time > task.execution_time:
-    #                 bool = False
-    #                 for core2 in self.cores:
-    #                     if core2.current_task is None:
-    #                         core2.assign_task
-    #                         bool = True
-    #                 if bool == False:
-    #                     core.assign_task()
+            core.execute()
 
     def add_task(self, task):
         task.state = Task_State.READY

@@ -30,8 +30,8 @@ SubSubsystem 3:
                 Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
-T31 arrived at time: 4
 Time: 4
+T31 arrived
 SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []

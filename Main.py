@@ -179,42 +179,56 @@ def main():
         4: open(f"./output/subsystem4_log.txt", "w"),
     }
 
+    subsystem1.set_file(subsystem_files[1])
+    subsystem2.set_file(subsystem_files[2])
+    subsystem3.set_file(subsystem_files[3])
+    subsystem4.set_file(subsystem_files[4])
+
     # Main simulation loop
     for time in range(15):
         # Create a new file for the current time unit
         with open(f"./output/time_{time}.txt", "w") as time_file:
             time_file.write(f"Time: {time}\n\n")
+            subsystem_files[1].write(f"Time: {time}\n")
+            subsystem_files[2].write(f"Time: {time}\n")
+            subsystem_files[3].write(f"Time: {time}\n")
+            subsystem_files[4].write(f"Time: {time}\n")
+
+            subsystem1.set_time(time)
+            subsystem2.set_time(time)
+            subsystem3.set_time(time)
+            subsystem4.set_time(time)
 
             # Check for task arrivals for each subsystem and log them
             for task in tasks1:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    time_file.write(f"{task.name} arrived\n")
+                    subsystem_files[1].write(f"{task.name} arrived\n")
                     subsystem1.add_task(task)
-                    subsystem_files[1].write(f"{task.name} arrived at time: {time}\n")
 
             for task in tasks2:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    time_file.write(f"{task.name} arrived\n")
+                    subsystem_files[2].write(f"{task.name} arrived\n")
                     subsystem2.add_task(task)
-                    subsystem_files[2].write(f"{task.name} arrived at time: {time}\n")
 
             for task in tasks3:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    time_file.write(f"{task.name} arrived\n")
+                    subsystem_files[3].write(f"{task.name} arrived\n")
                     subsystem3.add_task(task)
-                    subsystem_files[3].write(f"{task.name} arrived at time: {time}\n")
 
             for task in tasks4:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived at time: {time}\n")
+                    time_file.write(f"{task.name} arrived\n")
+                    subsystem_files[4].write(f"{task.name} arrived\n")
                     subsystem4.add_task(task)
-                    subsystem_files[4].write(f"{task.name} arrived at time: {time}\n")
 
             # Execute tasks in each subsystem
-            subsystem1.execute(time)
-            subsystem2.execute(time)
-            subsystem3.execute(time)
-            subsystem4.execute(time)
+            subsystem1.execute()
+            subsystem2.execute()
+            subsystem3.execute()
+            subsystem4.execute()
 
             # Log the status of each subsystem in the respective files
             subsystem_status = {
@@ -227,7 +241,7 @@ def main():
             for i in range(1, 5):
                 status_info = str(subsystem_status[i])
                 time_file.write(f"{status_info}\n")
-                subsystem_files[i].write(f"Time: {time}\n{status_info}\n")
+                subsystem_files[i].write(f"{status_info}\n")
 
             # Add a visual separator in the file
             # file.write("* " * 80 + "\n")

@@ -34,7 +34,7 @@ class Task:
         self.remaining_time = execution_time
 
         self.has_all_resources = False
-        self.remaining_quantum = None
+        self.remaining_quantum = 0
 
     # For sub 2
     def __lt__(self, other):

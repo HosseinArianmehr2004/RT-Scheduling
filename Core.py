@@ -3,8 +3,8 @@ from Task import *
 
 
 class Core:
-    def __init__(self, core_id, subsystem):
-        self.core_id = core_id
+    def __init__(self, id, subsystem):
+        self.id = id+1
         self.subsystem = subsystem
         self.current_task = None
 
@@ -16,7 +16,7 @@ class Core:
             heapq.heappush(self.ready_queue, task)
             task.state = Task_State.READY
 
-    def execute(self, time):
+    def execute(self):
         if self.current_task is not None:
             self.current_task.remaining_time -= 1
             if self.current_task.remaining_time == 0:
@@ -28,21 +28,13 @@ class Core:
 
 
 class Core_1(Core):
-    def __init__(self, core_id, subsystem):
-        super().__init__(core_id, subsystem)
+    def __init__(self, id, subsystem):
+        super().__init__(id, subsystem)
         self.ready_queue = []
         self.min_execution_time = None
 
     def assign_task(self, task):
-        if task.remaining_quantum is None and self.min_execution_time is not None:
-            if self.min_execution_time == float("inf"):
-                task.remaining_quantum = 1
-            else:
-                task.remaining_quantum = task.execution_time // self.min_execution_time
-            # print(
-            #     f"::: {task.name}, q: {task.remaining_quantum}, min_execution_time: {self.min_execution_time}"
-            # )
-
+        self.set_a_task_quantum(task)
         if self.current_task is None:
             task.state = Task_State.RUNNING
             self.current_task = task
@@ -52,7 +44,7 @@ class Core_1(Core):
 
     def determine_min_execution_time(self):
         if self.current_task is None:
-            min_execution_time = float("inf")
+            min_execution_time = 1000
         else:
             min_execution_time = self.current_task.execution_time
 
@@ -61,24 +53,42 @@ class Core_1(Core):
                 min_execution_time = task.execution_time
         self.min_execution_time = min_execution_time
 
-    def set_tasks_quantum(self):
+    def set_a_task_quantum(self, task):
+        if task.remaining_quantum == 0 and self.min_execution_time is not None:
+            task.remaining_quantum = (
+                task.execution_time // self.min_execution_time
+            ) + 1
+            if task.remaining_quantum == 1:
+                task.remaining_quantum += 1
+            self.subsystem.file.write(
+                f"{task.name} remaining quantum: {task.remaining_quantum}\n"
+            )
+
+    def set_all_tasks_quantums(self):
         if self.current_task is not None:
             task = self.current_task
             task.remaining_quantum = task.execution_time // self.min_execution_time
-            # print(f"{task.name} remaining_quantum = {task.remaining_quantum}")
+            task.remaining_quantum += 1
+            self.subsystem.file.write(
+                f"{task.name} remaining_quantum = {task.remaining_quantum}\n"
+            )
         for task in self.ready_queue:
             task.remaining_quantum = task.execution_time // self.min_execution_time
-            # print(f"{task.name} remaining_quantum = {task.remaining_quantum}")
+            task.remaining_quantum += 1
+            self.subsystem.file.write(
+                f"{task.name} remaining_quantum = {task.remaining_quantum}\n"
+            )
 
-    def execute(self, time):
-        if time % 5 == 0:
+    def execute(self):
+        if self.subsystem.time % 10 == 0:
             self.determine_min_execution_time()
-            # print(f"\nTime: {time}")
-            # print(f"min execution time: {self.min_execution_time}")
-            self.set_tasks_quantum()
+            self.subsystem.file.write(
+                f"Core: {self.id} min execution time: {self.min_execution_time}\n"
+            )
+            self.set_all_tasks_quantums()
 
         if self.current_task is not None:
-            if time - self.current_task.arrival_time != 0:
+            if self.subsystem.time - self.current_task.arrival_time != 0:
                 self.current_task.remaining_time -= 1
                 self.current_task.remaining_quantum -= 1
 
@@ -92,13 +102,11 @@ class Core_1(Core):
                         self.assign_task(next_task)
 
                 elif self.current_task.remaining_quantum == 0:
+                    self.subsystem.file.write(
+                        f"Core: {self.id}, {self.current_task.name} remaining quantum: 0 --> "
+                    )
                     self.current_task.state = Task_State.READY
-                    if self.min_execution_time == float("inf"):
-                        self.current_task.remaining_quantum = 1
-                    else:
-                        self.current_task.remaining_quantum = (
-                            self.current_task.execution_time // self.min_execution_time
-                        )
+                    self.set_a_task_quantum(self.current_task)
                     self.ready_queue.append(self.current_task)
 
                     self.current_task = None
@@ -108,8 +116,8 @@ class Core_1(Core):
 
 
 class Core_2(Core):
-    def __init__(self, core_id, subsystem):
-        super().__init__(core_id, subsystem)
+    def __init__(self, id, subsystem):
+        super().__init__(id, subsystem)
         self.ready_queue = subsystem.ready_queue
 
     def assign_task(self):
@@ -120,34 +128,41 @@ class Core_2(Core):
                     self.current_task = task
                     self.current_task.state = Task_State.RUNNING
                 else:
-                    print(f"Task {self.current_task.name} preemped")
+                    self.subsystem.file.write(
+                        f"Task {self.current_task.name} preemped\n"
+                    )
                     self.current_task.state = Task_State.READY
                     heapq.heappush(self.ready_queue, self.current_task)
                     self.current_task = task
                     self.current_task.state = Task_State.RUNNING
-                    print(f"Task {self.current_task.name} assigned to CPU")
+                    self.subsystem.file.write(
+                        f"Task {self.current_task.name} assigned to CPU\n"
+                    )
             else:
                 heapq.heappush(self.ready_queue, task)
-                print("\nThere is not enough resources\n")
+                self.subsystem.file.write("\nThere is not enough resources\n")
         else:
             if self.current_task is None:
                 self.current_task = task
                 self.current_task.state = Task_State.RUNNING
             else:
-                print(f"Task {self.current_task.name} preemped")
+                self.subsystem.file.write(f"Task {self.current_task.name} preemped\n")
                 self.current_task.state = Task_State.READY
                 heapq.heappush(self.ready_queue, self.current_task)
                 self.current_task = task
                 self.current_task.state = Task_State.RUNNING
-                print(f"Task {self.current_task.name} assigned to CPU")
+                self.subsystem.file.write(
+                    f"Task {self.current_task.name} assigned to CPU\n"
+                )
 
-    def execute(self, time):
+    def execute(self):
         if self.current_task is not None:
-            if time - self.current_task.arrival_time != 0:
+            if self.subsystem.time - self.current_task.arrival_time != 0:
                 self.current_task.remaining_time -= 1
             if self.current_task.remaining_time == 0:
                 self.current_task.state = Task_State.COMPLETED
                 self.subsystem.release_resources(self.current_task)
+                # self.subsystem.file.write(self.current_task.resources_needed)
                 print(self.current_task.resources_needed)
 
                 self.current_task = None
@@ -156,12 +171,12 @@ class Core_2(Core):
 
 
 class Core_3(Core):
-    def __init__(self, core_id, subsystem):
-        super().__init__(core_id, subsystem)
+    def __init__(self, id, subsystem):
+        super().__init__(id, subsystem)
         self.ready_queue = []
 
 
 class Core_4(Core):
-    def __init__(self, core_id, subsystem):
-        super().__init__(core_id, subsystem)
+    def __init__(self, id, subsystem):
+        super().__init__(id, subsystem)
         self.ready_queue = subsystem.ready_queue

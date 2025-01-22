@@ -53,8 +53,8 @@ SubSubsystem 4:
                 Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
-T41 arrived at time: 5
 Time: 5
+T41 arrived
 SubSubsystem 4:
         Resources: R1: 2 R2: 2
         Waiting Queue []
@@ -76,8 +76,8 @@ SubSubsystem 4:
                 Running Task: ---, remaining time: -, remaining quantum: -
                 Ready Queue: []
 
-T42 arrived at time: 7
 Time: 7
+T42 arrived
 SubSubsystem 4:
         Resources: R1: 2 R2: 2
         Waiting Queue []
