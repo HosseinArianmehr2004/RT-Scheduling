@@ -1,7 +1,8 @@
 Time: 2
 
-T14 arrived
-T15 arrived
+Task [T14] arrived !
+Task [T15] arrived !
+Task [T23] arrived !
 SubSubsystem 1:
         Resources: R1: 0 R2: 1
         Waiting Queue ['T14']
@@ -17,11 +18,11 @@ SubSubsystem 1:
 
 SubSubsystem 2:
         Resources: R1: 0 R2: 0
-        Ready Queue: ['T23']
+        Ready Queue: ['T21']
         Core1:
-                Running Task: T21, remaining time: 1
+                Running Task: T23, remaining time: 5
         Core2:
-                Running Task: T22, remaining time: 3
+                Running Task: T22, remaining time: 7
 
 SubSubsystem 3:
         Resources: R1: 4 R2: 10

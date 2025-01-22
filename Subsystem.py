@@ -136,28 +136,40 @@ class Subsystem_2(Subsystem):
             core.execute()
 
     def add_task(self, task):
+        # Add a task to the ready queue
         task.state = Task_State.READY
         heapq.heappush(self.ready_queue, task)
 
-        # for core in self.cores:
-        #     if len(self.ready_queue) > 0:
-        #         if (
-        #             core.current_task is None
-        #             or core.current_task.remaining_time > task.execution_time
-        #         ):
-        #             core.assign_task()
+        # Assign task to core
         assigned = False
         for core in self.cores:
             if self.ready_queue:
                 if core.current_task is None:
                     core.assign_task()
                     assigned = True
+                    break
         if not assigned:
             for core in self.cores:
                 if self.ready_queue:
-                    if core.current_task.remaining_time > task.execution_time:
+                    if core.current_task.remaining_time > task.remaining_time:
                         core.assign_task()
-                        assigned = False
+                        break
+
+        # Deadlock detection
+        count = 0
+        for core in self.cores:
+            if core.current_task is not None:
+                if not core.current_task.has_all_resources:
+                    count += 1
+
+        if count == 2:  # Deadlock has occurred.
+            self.file.write(f"Deadlock has occurred !!!!!\n")
+
+            # Deadlock resolution
+            for task in self.ready_queue:
+                self.release_resources(task)
+                task.has_all_resources = False
+                task.remaining_time = task.execution_time
 
 
 class Subsystem_3(Subsystem):

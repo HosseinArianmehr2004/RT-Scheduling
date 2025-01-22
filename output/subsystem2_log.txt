@@ -1,141 +1,152 @@
 Time: 0
-T21 arrived
+Task [T21] arrived !
+Resources allocated to task [T21] !
 SubSubsystem 2:
         Resources: R1: 0 R2: 1
         Ready Queue: []
         Core1:
-                Running Task: T21, remaining time: 3
+                Running Task: T21, remaining time: 9
         Core2:
                 Running Task: ---, remaining time: -
 
 Time: 1
-T22 arrived
-T23 arrived
+Task [T22] arrived !
+Resources allocated to task [T22] !
 SubSubsystem 2:
         Resources: R1: 0 R2: 0
-        Ready Queue: ['T23']
+        Ready Queue: []
         Core1:
-                Running Task: T21, remaining time: 2
+                Running Task: T21, remaining time: 8
         Core2:
-                Running Task: T22, remaining time: 4
+                Running Task: T22, remaining time: 8
 
 Time: 2
+Task [T23] arrived !
+Resources were not allocated to task [T23] !
+Task [T21] preemped !
+Task [T23] assigned to CPU !
 SubSubsystem 2:
         Resources: R1: 0 R2: 0
-        Ready Queue: ['T23']
-        Core1:
-                Running Task: T21, remaining time: 1
-        Core2:
-                Running Task: T22, remaining time: 3
-
-Time: 3
-SubSubsystem 2:
-        Resources: R1: 2 R2: 0
-        Ready Queue: []
+        Ready Queue: ['T21']
         Core1:
                 Running Task: T23, remaining time: 5
         Core2:
-                Running Task: T22, remaining time: 2
+                Running Task: T22, remaining time: 7
+
+Time: 3
+Task [T24] arrived !
+Resources were not allocated to task [T24] !
+Task [T22] preemped !
+Task [T24] assigned to CPU !
+Deadlock has occurred !!!!!
+SubSubsystem 2:
+        Resources: R1: 1 R2: 0
+        Ready Queue: ['T22', 'T21']
+        Core1:
+                Running Task: T23, remaining time: 5
+        Core2:
+                Running Task: T24, remaining time: 5
 
 Time: 4
-T24 arrived
-
-There is not enough resources
 SubSubsystem 2:
-        Resources: R1: 2 R2: 0
-        Ready Queue: ['T24']
+        Resources: R1: 1 R2: 0
+        Ready Queue: ['T22', 'T21']
         Core1:
                 Running Task: T23, remaining time: 4
         Core2:
-                Running Task: T22, remaining time: 1
+                Running Task: T24, remaining time: 4
 
 Time: 5
 SubSubsystem 2:
         Resources: R1: 1 R2: 0
-        Ready Queue: []
+        Ready Queue: ['T22', 'T21']
         Core1:
                 Running Task: T23, remaining time: 3
         Core2:
-                Running Task: T24, remaining time: 2
+                Running Task: T24, remaining time: 3
 
 Time: 6
 SubSubsystem 2:
         Resources: R1: 1 R2: 0
-        Ready Queue: []
+        Ready Queue: ['T22', 'T21']
         Core1:
                 Running Task: T23, remaining time: 2
         Core2:
-                Running Task: T24, remaining time: 1
+                Running Task: T24, remaining time: 2
 
 Time: 7
 SubSubsystem 2:
-        Resources: R1: 2 R2: 1
-        Ready Queue: []
+        Resources: R1: 1 R2: 0
+        Ready Queue: ['T22', 'T21']
         Core1:
                 Running Task: T23, remaining time: 1
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T24, remaining time: 1
 
 Time: 8
+Task [T23] completed !
+Resources allocated to task [T22] !
+Task [T24] completed !
+Resources allocated to task [T21] !
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 0
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T22, remaining time: 8
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T21, remaining time: 9
 
 Time: 9
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 0
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T22, remaining time: 7
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T21, remaining time: 8
 
 Time: 10
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 0
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T22, remaining time: 6
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T21, remaining time: 7
 
 Time: 11
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 0
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T22, remaining time: 5
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T21, remaining time: 6
 
 Time: 12
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 0
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T22, remaining time: 4
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T21, remaining time: 5
 
 Time: 13
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 0
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T22, remaining time: 3
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T21, remaining time: 4
 
 Time: 14
 SubSubsystem 2:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 0
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T22, remaining time: 2
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T21, remaining time: 3
 

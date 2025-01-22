@@ -202,26 +202,26 @@ def main():
             # Check for task arrivals for each subsystem and log them
             for task in tasks1:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived\n")
-                    subsystem_files[1].write(f"{task.name} arrived\n")
+                    time_file.write(f"Task [{task.name}] arrived !\n")
+                    subsystem_files[1].write(f"Task [{task.name}] arrived !\n")
                     subsystem1.add_task(task)
 
             for task in tasks2:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived\n")
-                    subsystem_files[2].write(f"{task.name} arrived\n")
+                    time_file.write(f"Task [{task.name}] arrived !\n")
+                    subsystem_files[2].write(f"Task [{task.name}] arrived !\n")
                     subsystem2.add_task(task)
 
             for task in tasks3:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived\n")
-                    subsystem_files[3].write(f"{task.name} arrived\n")
+                    time_file.write(f"Task [{task.name}] arrived !\n")
+                    subsystem_files[3].write(f"Task [{task.name}] arrived !\n")
                     subsystem3.add_task(task)
 
             for task in tasks4:
                 if time == task.arrival_time:
-                    time_file.write(f"{task.name} arrived\n")
-                    subsystem_files[4].write(f"{task.name} arrived\n")
+                    time_file.write(f"Task [{task.name}] arrived !\n")
+                    subsystem_files[4].write(f"Task [{task.name}] arrived !\n")
                     subsystem4.add_task(task)
 
             # Execute tasks in each subsystem

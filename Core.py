@@ -4,7 +4,7 @@ from Task import *
 
 class Core:
     def __init__(self, id, subsystem):
-        self.id = id+1
+        self.id = id + 1
         self.subsystem = subsystem
         self.current_task = None
 
@@ -122,52 +122,50 @@ class Core_2(Core):
 
     def assign_task(self):
         task = heapq.heappop(self.ready_queue)
-        if task.has_all_resources == False:
+        if not task.has_all_resources:
             if self.subsystem.allocate_resources(task):
-                if self.current_task is None:
-                    self.current_task = task
-                    self.current_task.state = Task_State.RUNNING
-                else:
-                    self.subsystem.file.write(
-                        f"Task {self.current_task.name} preemped\n"
-                    )
-                    self.current_task.state = Task_State.READY
-                    heapq.heappush(self.ready_queue, self.current_task)
-                    self.current_task = task
-                    self.current_task.state = Task_State.RUNNING
-                    self.subsystem.file.write(
-                        f"Task {self.current_task.name} assigned to CPU\n"
-                    )
-            else:
-                heapq.heappush(self.ready_queue, task)
-                self.subsystem.file.write("\nThere is not enough resources\n")
-        else:
-            if self.current_task is None:
-                self.current_task = task
-                self.current_task.state = Task_State.RUNNING
-            else:
-                self.subsystem.file.write(f"Task {self.current_task.name} preemped\n")
-                self.current_task.state = Task_State.READY
-                heapq.heappush(self.ready_queue, self.current_task)
-                self.current_task = task
-                self.current_task.state = Task_State.RUNNING
                 self.subsystem.file.write(
-                    f"Task {self.current_task.name} assigned to CPU\n"
+                    f"Resources allocated to task [{task.name}] !\n"
                 )
+            else:
+                self.subsystem.file.write(
+                    f"Resources were not allocated to task [{task.name}] !\n"
+                )
+        if self.current_task is None:
+            self.current_task = task
+            self.current_task.state = Task_State.RUNNING
+        else:
+            self.current_task.state = Task_State.READY
+            self.subsystem.file.write(f"Task [{self.current_task.name}] preemped !\n")
+            heapq.heappush(self.ready_queue, self.current_task)
+            self.current_task = task
+            self.current_task.state = Task_State.RUNNING
+            self.subsystem.file.write(
+                f"Task [{self.current_task.name}] assigned to CPU !\n"
+            )
 
     def execute(self):
         if self.current_task is not None:
-            if self.subsystem.time - self.current_task.arrival_time != 0:
+            if (
+                self.subsystem.time - self.current_task.arrival_time != 0
+                and self.current_task.has_all_resources
+            ):
                 self.current_task.remaining_time -= 1
-            if self.current_task.remaining_time == 0:
+
+            if self.current_task.remaining_time == 0:  # Task completed
                 self.current_task.state = Task_State.COMPLETED
                 self.subsystem.release_resources(self.current_task)
-                # self.subsystem.file.write(self.current_task.resources_needed)
-                print(self.current_task.resources_needed)
+                self.subsystem.file.write(
+                    f"Task [{self.current_task.name}] completed !\n"
+                )
 
+                # Assign new task to core
                 self.current_task = None
                 if len(self.ready_queue) > 0:
                     self.assign_task()
+
+            if not self.current_task.has_all_resources:
+                self.subsystem.allocate_resources(self.current_task)
 
 
 class Core_3(Core):

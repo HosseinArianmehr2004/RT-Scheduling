@@ -1,6 +1,6 @@
 Time: 0
-T11 arrived
-T12 arrived
+Task [T11] arrived !
+Task [T12] arrived !
 Core: 1 min execution time: 4
 T11 remaining_quantum = 2
 T12 remaining_quantum = 3
@@ -20,7 +20,7 @@ SubSubsystem 1:
                 Ready Queue: []
 
 Time: 1
-T13 arrived
+Task [T13] arrived !
 T13 remaining quantum: 3
 SubSubsystem 1:
         Resources: R1: 0 R2: 2
@@ -36,8 +36,8 @@ SubSubsystem 1:
                 Ready Queue: []
 
 Time: 2
-T14 arrived
-T15 arrived
+Task [T14] arrived !
+Task [T15] arrived !
 T15 remaining quantum: 2
 Core: 1, T11 remaining quantum: 0 --> T11 remaining quantum: 2
 SubSubsystem 1:
@@ -54,7 +54,7 @@ SubSubsystem 1:
                 Ready Queue: []
 
 Time: 3
-T16 arrived
+Task [T16] arrived !
 SubSubsystem 1:
         Resources: R1: 0 R2: 1
         Waiting Queue ['T14', 'T16']
@@ -182,7 +182,7 @@ SubSubsystem 1:
                 Ready Queue: []
 
 Time: 11
-T17 arrived
+Task [T17] arrived !
 T17 remaining quantum: 3
 Core: 3, T13 remaining quantum: 0 --> T13 remaining quantum: 2
 SubSubsystem 1:
