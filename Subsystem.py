@@ -183,4 +183,72 @@ class Subsystem_4(Subsystem):
     def __init__(self, id, num_cores, resources):
         super().__init__(id, resources)
         self.waiting_queue = []
+        self.completed_tasks = []
         self.cores = [Core_4(i, self) for i in range(num_cores)]
+
+    def get_status(self):
+        status = f"Sub{self.id}:\n"
+        status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
+        status += (
+            f"        Waiting Queue: {[task.name for task in self.waiting_queue]}\n"
+        )
+        status += f"        Ready Queue: {[task.name for task in self.ready_queue]}\n"
+        for core in self.cores:
+            status += f"        Core{core.id}:\n"
+            status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
+            status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}\n"
+        return status
+
+    def execute(self):
+
+        # Moving tasks from waiting queue to ready queue
+        if self.waiting_queue:
+            for _ in self.waiting_queue:
+                task = self.waiting_queue.pop(0)
+                for completed_task in self.completed_tasks:
+                    if task.prerequisite_task_name == completed_task.name:
+                        task.prerequisite = True
+                        break
+                if task.prerequisite:
+                    if self.allocate_resources(task):
+                        task.arrival_time = self.time
+                        self.ready_queue.append(task)
+                    else:
+                        self.waiting_queue.append(task)
+                else:
+                    self.waiting_queue.append(task)
+
+        # Assign task to core
+        for core in self.cores:
+            if self.ready_queue:
+                if core.current_task is None:
+                    core.assign_task()
+                    break
+
+        for core in self.cores:
+            core.execute()
+
+    def add_task(self, task):
+        # For prerequisite tasks
+        if task.prerequisite_task_name == "-":
+            task.prerequisite = True
+        else:
+            for completed_task in self.completed_tasks:
+                if task.prerequisite_task_name == completed_task.name:
+                    task.prerequisite = True
+                    break
+
+        # Append to the waiting queue or ready queue
+        if task.prerequisite:
+            if self.allocate_resources(task):
+                task.state = Task_State.READY
+                self.ready_queue.append(task)
+                self.file.write(f"Task [{task.name}] appended to ready queue !\n")
+            else:
+                task.state = Task_State.WAITING
+                self.waiting_queue.append(task)
+                self.file.write(f"Task [{task.name}] appended to waiting queue !\n")
+        else:
+            task.state = Task_State.WAITING
+            self.waiting_queue.append(task)
+            self.file.write(f"Task [{task.name}] appended to waiting queue !\n")

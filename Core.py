@@ -1,4 +1,5 @@
 import heapq
+import random
 from Task import *
 
 
@@ -164,7 +165,10 @@ class Core_2(Core):
                 if len(self.ready_queue) > 0:
                     self.assign_task()
 
-            if not self.current_task.has_all_resources:
+            if (
+                self.current_task is not None
+                and not self.current_task.has_all_resources
+            ):
                 self.subsystem.allocate_resources(self.current_task)
 
 
@@ -177,4 +181,31 @@ class Core_3(Core):
 class Core_4(Core):
     def __init__(self, id, subsystem):
         super().__init__(id, subsystem)
-        self.ready_queue = subsystem.ready_queue
+
+    def assign_task(self):
+        if self.subsystem.ready_queue:
+            task = self.subsystem.ready_queue.pop(0)
+            self.current_task = task
+            self.current_task.state = Task_State.RUNNING
+
+    def execute(self):
+        if self.current_task is not None:
+            if self.subsystem.time - self.current_task.arrival_time != 0:
+                self.current_task.remaining_time -= 1
+
+                # For an error with a probability of 30 percent
+                random_number = random.random()
+                if random_number < 0.3:
+                    self.current_task.remaining_time += 1
+                    self.subsystem.file.write(
+                        f"Task [{self.current_task.name}] failed !\n"
+                    )
+
+            if self.current_task.remaining_time == 0:  # Task completed
+                self.current_task.state = Task_State.COMPLETED
+                self.subsystem.completed_tasks.append(self.current_task)
+                self.subsystem.release_resources(self.current_task)
+                self.subsystem.file.write(
+                    f"Task [{self.current_task.name}] completed !\n"
+                )
+                self.current_task = None

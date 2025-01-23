@@ -35,6 +35,8 @@ class Task:
 
         self.has_all_resources = False
         self.remaining_quantum = 0
+        self.prerequisite = False
+
 
     # For sub 2
     def __lt__(self, other):

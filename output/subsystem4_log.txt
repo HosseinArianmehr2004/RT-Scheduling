@@ -1,167 +1,165 @@
 Time: 0
+Task [T41] arrived !
+Task [T41] appended to waiting queue !
 SubSubsystem 4:
         Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Waiting Queue: ['T41']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
 
 Time: 1
+Task [T42] arrived !
+Task [T42] appended to ready queue !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 2 R2: 1
+        Waiting Queue: ['T41']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T42, remaining time: 3
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
 
 Time: 2
+Task [T43] arrived !
+Task [T43] appended to ready queue !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 2 R2: 0
+        Waiting Queue: ['T41']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T42, remaining time: 2
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 6
 
 Time: 3
+Task [T44] arrived !
+Task [T44] appended to waiting queue !
+Task [T43] failed !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 2 R2: 0
+        Waiting Queue: ['T41', 'T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T42, remaining time: 1
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 6
 
 Time: 4
+Task [T42] completed !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 2 R2: 1
+        Waiting Queue: ['T41', 'T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 5
 
 Time: 5
-Task [T41] arrived !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 0
+        Waiting Queue: ['T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T41, remaining time: 3
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 4
 
 Time: 6
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 0
+        Waiting Queue: ['T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T41, remaining time: 2
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 3
 
 Time: 7
-Task [T42] arrived !
+Task [T43] failed !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 0 R2: 0
+        Waiting Queue: ['T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T41, remaining time: 1
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 3
 
 Time: 8
+Task [T41] completed !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 2 R2: 1
+        Waiting Queue: ['T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 2
 
 Time: 9
+Task [T43] failed !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 2 R2: 1
+        Waiting Queue: ['T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 2
 
 Time: 10
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 2 R2: 1
+        Waiting Queue: ['T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T43, remaining time: 1
 
 Time: 11
+Task [T43] completed !
 SubSubsystem 4:
         Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Waiting Queue: ['T44']
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
 
 Time: 12
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 1 R2: 1
+        Waiting Queue: []
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T44, remaining time: 2
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
 
 Time: 13
+Task [T44] failed !
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 1 R2: 1
+        Waiting Queue: []
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T44, remaining time: 2
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
 
 Time: 14
 SubSubsystem 4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue []
+        Resources: R1: 1 R2: 1
+        Waiting Queue: []
+        Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: T44, remaining time: 1
         Core2:
-                Running Task: ---, remaining time: -, remaining quantum: -
-                Ready Queue: []
+                Running Task: ---, remaining time: -
 
