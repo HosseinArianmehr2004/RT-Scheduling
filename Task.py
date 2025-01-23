@@ -26,21 +26,26 @@ class Task:
         self.arrival_time = arrival_time
 
         self.destination_CPU_number = destination_CPU_number
+
         self.period = period
+        self.backup_period = period
+
         self.number_of_repeat_times = number_of_repeat_times
         self.prerequisite_task_name = prerequisite_task_name
 
         self.state = Task_State.READY
-        self.remaining_time = execution_time
+        self.remaining_time = execution_time + 1
 
         self.has_all_resources = False
         self.remaining_quantum = 0
         self.prerequisite = False
-
 
     # For sub 2
     def __lt__(self, other):
         return self.remaining_time < other.remaining_time
 
     def __str__(self):
-        return f"Task name: {self.name}, execution time: {self.execution_time}, remaining_time: {self.remaining_time}"
+        return f"{self.name}, execution time: {self.execution_time}, remaining_time: {self.remaining_time}"
+
+    def __repr__(self):
+        return f"[{self.name}, execution time: {self.execution_time}, remaining_time: {self.remaining_time}]"

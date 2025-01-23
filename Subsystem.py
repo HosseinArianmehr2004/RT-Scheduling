@@ -1,4 +1,8 @@
+# from sys import *
 import heapq
+from math import gcd
+import matplotlib.pyplot as plt
+import numpy as np
 from Task import *
 from Core import *
 
@@ -177,6 +181,142 @@ class Subsystem_3(Subsystem):
         super().__init__(id, resources)
         self.waiting_queue = []
         self.cores = [Core_3(i, self) for i in range(num_cores)]
+
+        self.is_schedulable = None
+        self.hyper_period = None
+
+    def get_status(self):
+        status = f"Sub{self.id}:\n"
+        status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
+        status += (
+            f"        Waiting Queue {[task.name for task in self.waiting_queue]}\n"
+        )
+        for core in self.cores:
+            status += f"        Core{core.id}:\n"
+            status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
+            status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}"
+            status += f", number of repeat times: {core.current_task.number_of_repeat_times if core.current_task else '-'}\n"
+            status += f"                Ready Queue: {[task.name for task in core.ready_queue]}\n"
+        return status
+
+    def hyperperiod(self):
+        temp = []
+        for task in self.ready_queue:
+            temp.append(task.period)
+        hp = temp[0]
+        for i in temp[1:]:
+            hp = hp * i // gcd(hp, i)
+        # print("Hyperperiod:", hp)
+        return hp
+
+    def schedulablity(self):
+        """
+        Calculates the utilization factor of the tasks to be scheduled
+        and then checks for the schedulablity and then returns true is
+        schedulable else false.
+        """
+
+        T = []
+        C = []
+        U = []
+        n = len(self.ready_queue)
+
+        for i in range(n):
+            T.append(self.ready_queue[i].period)
+            C.append(self.ready_queue[i].execution_time)
+            u = int(C[i]) / int(T[i])
+            U.append(u)
+
+        U_factor = sum(U)
+        if U_factor <= 1:
+            print("Utilization factor: ", U_factor, "underloaded tasks")
+
+            sched_util = n * (2 ** (1 / n) - 1)
+            print("Checking condition: ", sched_util)
+
+            count = 0
+            T.sort()
+            for i in range(len(T)):
+                if T[i] % T[0] == 0:
+                    count = count + 1
+
+            # Checking the schedulablity condition
+            if U_factor <= sched_util or count == len(T):
+                print("Tasks are schedulable by Rate Monotonic Scheduling!")
+                return True
+            else:
+                print("Tasks are not schedulable by Rate Monotonic Scheduling!")
+                return False
+        print("Overloaded tasks!")
+        print("Utilization factor > 1")
+        return False
+
+    def check_validation(self):
+        for task in self.ready_queue:
+            if task.execution_time > task.period:
+                print(f"{task.name} can not be completed in the specified time !")
+
+    def give_next_task(self):
+        priority_task = None
+        min_period = float("inf")
+
+        for task in self.ready_queue:
+            if task.remaining_time - 1 != 0:  # Task is ready
+                if task.period < min_period:
+                    min_period = task.period
+                    priority_task = task
+
+        return priority_task
+
+    def add_task(self, task):
+        task.state = Task_State.READY
+        self.ready_queue.append(task)
+
+    def execute(self):
+        if self.time == 0:
+            self.is_schedulable = self.schedulablity()
+            if self.is_schedulable:
+                self.hyper_period = self.hyperperiod()
+                self.check_validation()
+
+        priority_task = self.give_next_task()
+        self.cores[0].assign_task(priority_task)
+        self.cores[0].execute()
+
+        # Update Period after each clock cycle
+        for task in self.ready_queue:
+            task.period -= 1
+            if task.period == 0:
+                task.remaining_time = task.execution_time + 1
+                task.period = task.backup_period
+                task.number_of_repeat_times -= 1
+                if task.number_of_repeat_times == 0:
+                    self.ready_queue.remove(task)
+
+        # Check waiting queue and try to assign tasks
+        for task in self.waiting_queue[:]:
+            if self.allocate_resources(task):
+                core = self.select_core(task)
+                core.assign_task(task)
+                self.waiting_queue.remove(task)
+
+    def drawGantt(self):
+        """
+        The scheduled results are displayed in the form of a
+        gantt chart for the user to get better understanding
+        """
+        n = len(self.ready_queue)
+        colors = ["red", "green", "blue", "orange", "yellow"]
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        # the data is plotted from_x to to_x along y_axis
+        ax = plt.hlines(y_axis, from_x, to_x, linewidth=20, color=colors[n - 1])
+        plt.title("Rate Monotonic scheduling")
+        plt.grid(True)
+        plt.xlabel("Real-Time clock")
+        plt.ylabel("HIGH------------------Priority--------------------->LOW")
+        plt.xticks(np.arange(min(from_x), max(to_x) + 1, 1.0))
+        plt.show()
 
 
 class Subsystem_4(Subsystem):

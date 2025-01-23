@@ -1,6 +1,13 @@
+# from sys import *
 import heapq
 import random
 from Task import *
+
+
+# For gantt chart
+y_axis = []
+from_x = []
+to_x = []
 
 
 class Core:
@@ -175,7 +182,23 @@ class Core_2(Core):
 class Core_3(Core):
     def __init__(self, id, subsystem):
         super().__init__(id, subsystem)
-        self.ready_queue = []
+        self.ready_queue = subsystem.ready_queue
+
+    def assign_task(self, task):
+        if task is not None:
+            task.state = Task_State.RUNNING
+        self.current_task = task
+
+    def execute(self):
+        t = self.subsystem.time
+        from_x.append(t)
+        to_x.append(t + 1)
+
+        if self.current_task is not None:  # core is not idle
+            y_axis.append(f"{self.current_task.name}")
+            self.current_task.remaining_time -= 1
+        else:  # core is idle
+            y_axis.append("IDLE")
 
 
 class Core_4(Core):

@@ -49,6 +49,9 @@ def run_subsystem(subsystem, tasks, time_range, subsystem_file, thread_id):
                 current_thread = 1
             condition.notify_all()
 
+    if subsystem.id == "Subsystem 3":
+        subsystem.drawGantt()
+
 
 def main():
     # Reading information from the file
@@ -225,7 +228,9 @@ def main():
     subsystem3.set_file(subsystem_files[3])
     subsystem4.set_file(subsystem_files[4])
 
-    for time in range(15):
+    time_range = 20
+    
+    for time in range(time_range):
         with open(f"./output/time_{time}.txt", "w"):
             pass
 
@@ -233,22 +238,22 @@ def main():
     threads = []
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem1, tasks1, 15, subsystem_files[1], 1)
+            target=run_subsystem, args=(subsystem1, tasks1, time_range, subsystem_files[1], 1)
         )
     )
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem2, tasks2, 15, subsystem_files[2], 2)
+            target=run_subsystem, args=(subsystem2, tasks2, time_range, subsystem_files[2], 2)
         )
     )
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem3, tasks3, 15, subsystem_files[3], 3)
+            target=run_subsystem, args=(subsystem3, tasks3, time_range, subsystem_files[3], 3)
         )
     )
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem4, tasks4, 15, subsystem_files[4], 4)
+            target=run_subsystem, args=(subsystem4, tasks4, time_range, subsystem_files[4], 4)
         )
     )
 
