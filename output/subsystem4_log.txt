@@ -37,6 +37,17 @@ SubSubsystem 4:
 Time: 3
 Task [T44] arrived !
 Task [T44] appended to waiting queue !
+SubSubsystem 4:
+        Resources: R1: 2 R2: 0
+        Waiting Queue: ['T41', 'T44']
+        Ready Queue: []
+        Core1:
+                Running Task: T42, remaining time: 1
+        Core2:
+                Running Task: T43, remaining time: 5
+
+Time: 4
+Task [T42] failed !
 Task [T43] failed !
 SubSubsystem 4:
         Resources: R1: 2 R2: 0
@@ -45,9 +56,9 @@ SubSubsystem 4:
         Core1:
                 Running Task: T42, remaining time: 1
         Core2:
-                Running Task: T43, remaining time: 6
+                Running Task: T43, remaining time: 5
 
-Time: 4
+Time: 5
 Task [T42] completed !
 SubSubsystem 4:
         Resources: R1: 2 R2: 1
@@ -56,9 +67,10 @@ SubSubsystem 4:
         Core1:
                 Running Task: ---, remaining time: -
         Core2:
-                Running Task: T43, remaining time: 5
+                Running Task: T43, remaining time: 4
 
-Time: 5
+Time: 6
+Task [T43] failed !
 SubSubsystem 4:
         Resources: R1: 0 R2: 0
         Waiting Queue: ['T44']
@@ -68,7 +80,8 @@ SubSubsystem 4:
         Core2:
                 Running Task: T43, remaining time: 4
 
-Time: 6
+Time: 7
+Task [T43] failed !
 SubSubsystem 4:
         Resources: R1: 0 R2: 0
         Waiting Queue: ['T44']
@@ -76,9 +89,9 @@ SubSubsystem 4:
         Core1:
                 Running Task: T41, remaining time: 2
         Core2:
-                Running Task: T43, remaining time: 3
+                Running Task: T43, remaining time: 4
 
-Time: 7
+Time: 8
 Task [T43] failed !
 SubSubsystem 4:
         Resources: R1: 0 R2: 0
@@ -87,9 +100,9 @@ SubSubsystem 4:
         Core1:
                 Running Task: T41, remaining time: 1
         Core2:
-                Running Task: T43, remaining time: 3
+                Running Task: T43, remaining time: 4
 
-Time: 8
+Time: 9
 Task [T41] completed !
 SubSubsystem 4:
         Resources: R1: 2 R2: 1
@@ -98,18 +111,7 @@ SubSubsystem 4:
         Core1:
                 Running Task: ---, remaining time: -
         Core2:
-                Running Task: T43, remaining time: 2
-
-Time: 9
-Task [T43] failed !
-SubSubsystem 4:
-        Resources: R1: 2 R2: 1
-        Waiting Queue: ['T44']
-        Ready Queue: []
-        Core1:
-                Running Task: ---, remaining time: -
-        Core2:
-                Running Task: T43, remaining time: 2
+                Running Task: T43, remaining time: 3
 
 Time: 10
 SubSubsystem 4:
@@ -119,9 +121,19 @@ SubSubsystem 4:
         Core1:
                 Running Task: ---, remaining time: -
         Core2:
-                Running Task: T43, remaining time: 1
+                Running Task: T43, remaining time: 2
 
 Time: 11
+SubSubsystem 4:
+        Resources: R1: 2 R2: 1
+        Waiting Queue: ['T44']
+        Ready Queue: []
+        Core1:
+                Running Task: ---, remaining time: -
+        Core2:
+                Running Task: T43, remaining time: 1
+
+Time: 12
 Task [T43] completed !
 SubSubsystem 4:
         Resources: R1: 2 R2: 2
@@ -132,18 +144,7 @@ SubSubsystem 4:
         Core2:
                 Running Task: ---, remaining time: -
 
-Time: 12
-SubSubsystem 4:
-        Resources: R1: 1 R2: 1
-        Waiting Queue: []
-        Ready Queue: []
-        Core1:
-                Running Task: T44, remaining time: 2
-        Core2:
-                Running Task: ---, remaining time: -
-
 Time: 13
-Task [T44] failed !
 SubSubsystem 4:
         Resources: R1: 1 R2: 1
         Waiting Queue: []
@@ -154,12 +155,13 @@ SubSubsystem 4:
                 Running Task: ---, remaining time: -
 
 Time: 14
+Task [T44] failed !
 SubSubsystem 4:
         Resources: R1: 1 R2: 1
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T44, remaining time: 1
+                Running Task: T44, remaining time: 2
         Core2:
                 Running Task: ---, remaining time: -
 

@@ -1,5 +1,10 @@
 from Subsystem import *
 from Task import *
+import threading
+
+# For threads and locks
+condition = threading.Condition()
+current_thread = 1
 
 
 class Resource:
@@ -7,6 +12,42 @@ class Resource:
         self.name = name
         self.total_units = total_units
         self.available_units = total_units
+
+
+def run_subsystem(subsystem, tasks, time_range, subsystem_file, thread_id):
+    global current_thread
+    for time in range(time_range):
+        with condition:
+            # Waiting for this thread to come to its turn
+            while current_thread != thread_id:
+                condition.wait()
+
+            # Create a new file for the current time unit
+            with open(f"./output/time_{time}.txt", "a") as time_file:
+                time_file.write(f"Time: {time}\n")
+                subsystem_file.write(f"Time: {time}\n")
+                subsystem.set_time(time)
+
+                # Check for task arrivals for each subsystem and log them
+                for task in tasks:
+                    if time == task.arrival_time:
+                        time_file.write(f"Task [{task.name}] arrived !\n")
+                        subsystem_file.write(f"Task [{task.name}] arrived !\n")
+                        subsystem.add_task(task)
+
+                # Execute tasks in each subsystem
+                subsystem.execute()
+
+                # Log the status of each subsystem in the respective files
+                status_info = str(subsystem.get_status())
+                time_file.write(f"{status_info}\n")
+                subsystem_file.write(f"{status_info}\n")
+
+            # Increment the current thread number and notify other threads
+            current_thread += 1
+            if current_thread > 4:
+                current_thread = 1
+            condition.notify_all()
 
 
 def main():
@@ -184,74 +225,40 @@ def main():
     subsystem3.set_file(subsystem_files[3])
     subsystem4.set_file(subsystem_files[4])
 
-    # Main simulation loop
     for time in range(15):
-        # Create a new file for the current time unit
-        with open(f"./output/time_{time}.txt", "w") as time_file:
-            time_file.write(f"Time: {time}\n\n")
-            subsystem_files[1].write(f"Time: {time}\n")
-            subsystem_files[2].write(f"Time: {time}\n")
-            subsystem_files[3].write(f"Time: {time}\n")
-            subsystem_files[4].write(f"Time: {time}\n")
+        with open(f"./output/time_{time}.txt", "w"):
+            pass
 
-            subsystem1.set_time(time)
-            subsystem2.set_time(time)
-            subsystem3.set_time(time)
-            subsystem4.set_time(time)
+    # Create threads for each subsystem
+    threads = []
+    threads.append(
+        threading.Thread(
+            target=run_subsystem, args=(subsystem1, tasks1, 15, subsystem_files[1], 1)
+        )
+    )
+    threads.append(
+        threading.Thread(
+            target=run_subsystem, args=(subsystem2, tasks2, 15, subsystem_files[2], 2)
+        )
+    )
+    threads.append(
+        threading.Thread(
+            target=run_subsystem, args=(subsystem3, tasks3, 15, subsystem_files[3], 3)
+        )
+    )
+    threads.append(
+        threading.Thread(
+            target=run_subsystem, args=(subsystem4, tasks4, 15, subsystem_files[4], 4)
+        )
+    )
 
-            # Check for task arrivals for each subsystem and log them
-            for task in tasks1:
-                if time == task.arrival_time:
-                    time_file.write(f"Task [{task.name}] arrived !\n")
-                    subsystem_files[1].write(f"Task [{task.name}] arrived !\n")
-                    subsystem1.add_task(task)
+    # Start all threads
+    for thread in threads:
+        thread.start()
 
-            for task in tasks2:
-                if time == task.arrival_time:
-                    time_file.write(f"Task [{task.name}] arrived !\n")
-                    subsystem_files[2].write(f"Task [{task.name}] arrived !\n")
-                    subsystem2.add_task(task)
-
-            for task in tasks3:
-                if time == task.arrival_time:
-                    time_file.write(f"Task [{task.name}] arrived !\n")
-                    subsystem_files[3].write(f"Task [{task.name}] arrived !\n")
-                    subsystem3.add_task(task)
-
-            for task in tasks4:
-                if time == task.arrival_time:
-                    time_file.write(f"Task [{task.name}] arrived !\n")
-                    subsystem_files[4].write(f"Task [{task.name}] arrived !\n")
-                    subsystem4.add_task(task)
-
-            # Execute tasks in each subsystem
-            subsystem1.execute()
-            subsystem2.execute()
-            subsystem3.execute()
-            subsystem4.execute()
-
-            # Log the status of each subsystem in the respective files
-            subsystem_status = {
-                1: subsystem1.get_status(),
-                2: subsystem2.get_status(),
-                3: subsystem3.get_status(),
-                4: subsystem4.get_status(),
-            }
-
-            for i in range(1, 5):
-                status_info = str(subsystem_status[i])
-                time_file.write(f"{status_info}\n")
-                subsystem_files[i].write(f"{status_info}\n")
-
-            # Add a visual separator in the file
-            # file.write("* " * 80 + "\n")
-
-            # Optionally log the ready queue for subsystem 2
-            # for t in subsystem2.ready_queue:
-            #     file.write(
-            #         f"Task name: {t.name}, execution time: {t.execution_time}, remaining_time: {t.remaining_time}\n"
-            #     )
-            # file.write("\n")
+    # Wait for all threads to complete
+    for thread in threads:
+        thread.join()
 
     # Close all subsystem log files
     for file in subsystem_files.values():
