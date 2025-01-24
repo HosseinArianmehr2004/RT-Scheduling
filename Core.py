@@ -1,14 +1,7 @@
-# from sys import *
 import heapq
 import threading
 import random
 from Task import *
-
-
-# For gantt chart
-y_axis = []
-from_x = []
-to_x = []
 
 
 class Core:
@@ -16,6 +9,11 @@ class Core:
         self.id = id + 1
         self.subsystem = subsystem
         self.current_task = None
+
+        # For gantt chart
+        self.y_axis = []
+        self.from_x = []
+        self.to_x = []
 
     def assign_task(self, task):
         if self.current_task is None:
@@ -43,7 +41,6 @@ class Core_1(Core):
         self.min_execution_time = None
 
     def assign_task(self, task):
-        self.set_a_task_quantum(task)
         if self.current_task is None:
             task.state = Task_State.RUNNING
             self.current_task = task
@@ -51,82 +48,11 @@ class Core_1(Core):
             task.state = Task_State.READY
             self.ready_queue.append(task)
 
-    def determine_min_execution_time(self):
-        if self.current_task is None:
-            min_execution_time = 1000
-        else:
-            min_execution_time = self.current_task.execution_time
-
-        for task in self.ready_queue:
-            if task.execution_time < min_execution_time:
-                min_execution_time = task.execution_time
-        self.min_execution_time = min_execution_time
-
-    def set_a_task_quantum(self, task):
-        if task.remaining_quantum == 0 and self.min_execution_time is not None:
-            task.remaining_quantum = (
-                task.execution_time // self.min_execution_time
-            ) + 1
-            if task.remaining_quantum == 1:
-                task.remaining_quantum += 1
-            with self.subsystem.lock:
-                self.subsystem.file.write(
-                    f"{task.name} remaining quantum: {task.remaining_quantum}\n"
-                )
-
-    def set_all_tasks_quantums(self):
-        if self.current_task is not None:
-            task = self.current_task
-            task.remaining_quantum = task.execution_time // self.min_execution_time
-            task.remaining_quantum += 1
-            with self.subsystem.lock:
-                self.subsystem.file.write(
-                    f"{task.name} remaining_quantum = {task.remaining_quantum}\n"
-                )
-        for task in self.ready_queue:
-            task.remaining_quantum = task.execution_time // self.min_execution_time
-            task.remaining_quantum += 1
-            with self.subsystem.lock:
-                self.subsystem.file.write(
-                    f"{task.name} remaining_quantum = {task.remaining_quantum}\n"
-                )
-
     def execute(self):
-        if self.subsystem.time % 10 == 0:
-            self.determine_min_execution_time()
-            with self.subsystem.lock:
-                self.subsystem.file.write(
-                    f"Core: {self.id} min execution time: {self.min_execution_time}\n"
-                )
-            self.set_all_tasks_quantums()
-
         if self.current_task is not None:
             if self.subsystem.time - self.current_task.arrival_time != 0:
                 self.current_task.remaining_time -= 1
                 self.current_task.remaining_quantum -= 1
-
-                if self.current_task.remaining_time == 0:
-                    self.current_task.state = Task_State.COMPLETED
-                    self.subsystem.release_resources(self.current_task)
-
-                    self.current_task = None
-                    if self.ready_queue:
-                        next_task = self.ready_queue.pop(0)
-                        self.assign_task(next_task)
-
-                elif self.current_task.remaining_quantum == 0:
-                    with self.subsystem.lock:
-                        self.subsystem.file.write(
-                            f"Core: {self.id}, {self.current_task.name} remaining quantum: 0 --> "
-                        )
-                    self.current_task.state = Task_State.READY
-                    self.set_a_task_quantum(self.current_task)
-                    self.ready_queue.append(self.current_task)
-
-                    self.current_task = None
-                    if self.ready_queue:
-                        next_task = self.ready_queue.pop(0)
-                        self.assign_task(next_task)
 
 
 class Core_2(Core):
@@ -205,14 +131,14 @@ class Core_3(Core):
 
     def execute(self):
         t = self.subsystem.time
-        from_x.append(t)
-        to_x.append(t + 1)
+        self.from_x.append(t)
+        self.to_x.append(t + 1)
 
         if self.current_task is not None:  # core is not idle
-            y_axis.append(f"{self.current_task.name}")
+            self.y_axis.append(f"{self.current_task.name}")
             self.current_task.remaining_time -= 1
         else:  # core is idle
-            y_axis.append("IDLE")
+            self.y_axis.append("IDLE")
 
 
 class Core_4(Core):

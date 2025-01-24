@@ -49,9 +49,6 @@ def run_subsystem(subsystem, tasks, time_range, subsystem_file, thread_id):
                 current_thread = 1
             condition.notify_all()
 
-    if subsystem.id == "Subsystem 3":
-        subsystem.drawGantt()
-
 
 def main():
     # Reading information from the file
@@ -68,7 +65,7 @@ def main():
 
     # Initialize subsystems
     subsystem1 = Subsystem_1(
-        "Subsystem 1",
+        "Subsystem_1",
         3,
         {
             "R1": Resource("R1", int(resources[0])),
@@ -76,7 +73,7 @@ def main():
         },
     )
     subsystem2 = Subsystem_2(
-        "Subsystem 2",
+        "Subsystem_2",
         2,
         {
             "R1": Resource("R1", int(resources[2])),
@@ -84,7 +81,7 @@ def main():
         },
     )
     subsystem3 = Subsystem_3(
-        "Subsystem 3",
+        "Subsystem_3",
         1,
         {
             "R1": Resource("R1", int(resources[4])),
@@ -92,7 +89,7 @@ def main():
         },
     )
     subsystem4 = Subsystem_4(
-        "Subsystem 4",
+        "Subsystem_4",
         2,
         {
             "R1": Resource("R1", int(resources[6])),
@@ -276,6 +273,11 @@ def main():
     # Close all subsystem log files
     for file in subsystem_files.values():
         file.close()
+
+    subsystem1.draw_gantt_chart()
+    subsystem2.draw_gantt_chart()
+    subsystem3.draw_gantt_chart()
+    subsystem4.draw_gantt_chart()
 
 
 if __name__ == "__main__":

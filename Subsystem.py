@@ -1,4 +1,3 @@
-# from sys import *
 import heapq
 import threading
 from math import gcd
@@ -64,13 +63,68 @@ class Subsystem:
     def add_task(self, task):
         pass
 
+    def draw_gantt_chart(self, core):
+        """
+        The scheduled results are displayed in the form of a
+        gantt chart for the user to get better understanding
+        """
+        index = int(self.id.split("_")[1])
+        colors = ["red", "green", "blue", "yellow"]
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        # the data is plotted from_x to to_x along y_axis
+        ax = plt.hlines(
+            core.y_axis,
+            core.from_x,
+            core.to_x,
+            linewidth=20,
+            color=colors[index - 1],
+        )
+        plt.title(f"{self.id} Core_{core.id}")
+        plt.grid(True)
+        plt.xlabel("Real-Time clock")
+        if self.id == "Subsystem_3":
+            plt.ylabel("HIGH ----------------- Priority --------------------> LOW")
+        else:
+            plt.ylabel("<------------------ Tasks ------------------>")
+
+        plt.xticks(np.arange(min(core.from_x), max(core.to_x) + 1, 1.0))
+
+        # plt.show()
+
+        plt.savefig(f"figures/{self.id}_Core_{core.id}.png", bbox_inches="tight")
+        # plt.close(fig)  # Close the figure to free up memory
+
 
 class Subsystem_1(Subsystem):
     def __init__(self, id, num_cores, resources):
         super().__init__(id, resources)
         self.waiting_queue = []
         self.cores = [Core_1(i, self) for i in range(num_cores)]
-        self.lock = threading.Lock()
+
+    def get_status(self):
+        status = f"Sub{self.id}:\n"
+        status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
+        status += (
+            f"        Waiting Queue {[task.name for task in self.waiting_queue]}\n"
+        )
+        for core in self.cores:
+            status += f"        Core{core.id}:\n"
+            status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
+            status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}"
+            status += f", remaining quantum: {core.current_task.remaining_quantum if core.current_task else '-'}\n"
+            status += f"                Ready Queue: {[task.name for task in core.ready_queue]}\n"
+
+            t = self.time
+            core.from_x.append(t)
+            core.to_x.append(t + 1)
+
+            if core.current_task is not None:  # core is not idle
+                core.y_axis.append(f"{core.current_task.name}")
+            else:  # core is idle
+                core.y_axis.append("IDLE")
+
+        return status
 
     def load_balancing(self):
         # Identify underloaded and overloaded cores
@@ -91,21 +145,96 @@ class Subsystem_1(Subsystem):
                     )  # Take the last task from the ready queue
                     underloaded_core.assign_task(task)
                     task.state = Task_State.READY  # Update the task state
-                    with self.lock:  # استفاده از قفل هنگام نوشتن در فایل
-                        self.file.write(
-                            f"{task.name} migrated from Core {overloaded_core.id} to Core {underloaded_core.id}\n"
-                        )
+                    self.file.write(
+                        f"{task.name} migrated from Core {overloaded_core.id} to Core {underloaded_core.id}\n"
+                    )
                     break  # Move to the next underloaded core after transferring one task
 
-    def execute(self):
-        threads = []
-        for core in self.cores:
-            thread = threading.Thread(target=core.execute)
-            threads.append(thread)
-            thread.start()
+    def select_core(self, task):
+        return self.cores[task.destination_CPU_number - 1]
 
-        for thread in threads:
-            thread.join()
+    def set_all_tasks_quantums(self, core):
+        if core.current_task is not None:
+            task = core.current_task
+            task.remaining_quantum = task.execution_time // core.min_execution_time
+            task.remaining_quantum += 1
+            self.file.write(
+                f"{task.name} remaining_quantum = {task.remaining_quantum}\n"
+            )
+        for task in core.ready_queue:
+            task.remaining_quantum = task.execution_time // core.min_execution_time
+            task.remaining_quantum += 1
+            self.file.write(
+                f"{task.name} remaining_quantum = {task.remaining_quantum}\n"
+            )
+
+    def determine_min_execution_time(self, core):
+        if core.current_task is None:
+            min_execution_time = 1000
+        else:
+            min_execution_time = core.current_task.execution_time
+
+        for task in core.ready_queue:
+            if task.execution_time < min_execution_time:
+                min_execution_time = task.execution_time
+
+        core.min_execution_time = min_execution_time
+
+    def set_task_quantum(self, task, core):
+        if task.remaining_quantum == 0 and core.min_execution_time is not None:
+            task.remaining_quantum = (
+                task.execution_time // core.min_execution_time
+            ) + 1
+            if task.remaining_quantum == 1:
+                task.remaining_quantum += 1
+            self.file.write(
+                f"{task.name} remaining quantum: {task.remaining_quantum}\n"
+            )
+
+    def add_task(self, task):
+        if self.allocate_resources(task):
+            core = self.select_core(task)
+            self.set_task_quantum(task, core)
+            core.assign_task(task)
+        else:
+            self.waiting_queue.append(task)
+            task.state = Task_State.WAITING
+
+    def execute(self):
+        # determine mi execution time of all the tasks in each cores ready queue
+        if self.time % 10 == 0:
+            for core in self.cores:
+                self.determine_min_execution_time(core)
+                self.file.write(
+                    f"Core: {core.id} min execution time: {core.min_execution_time}\n"
+                )
+                self.set_all_tasks_quantums(core)
+
+        for core in self.cores:
+            core.execute()
+
+            if core.current_task is not None:
+                if core.current_task.remaining_time == 0:
+                    core.current_task.state = Task_State.COMPLETED
+                    self.release_resources(core.current_task)
+
+                    core.current_task = None
+                    if core.ready_queue:
+                        next_task = core.ready_queue.pop(0)
+                        core.assign_task(next_task)
+
+                elif core.current_task.remaining_quantum == 0:
+                    self.file.write(
+                        f"Core: {core.id}, {core.current_task.name} remaining quantum: 0 --> "
+                    )
+                    core.current_task.state = Task_State.READY
+                    self.set_task_quantum(core.current_task, core)
+                    core.ready_queue.append(core.current_task)
+
+                    core.current_task = None
+                    if core.ready_queue:
+                        next_task = core.ready_queue.pop(0)
+                        core.assign_task(next_task)
 
         if self.time % 4 == 0:
             self.load_balancing()
@@ -117,16 +246,9 @@ class Subsystem_1(Subsystem):
                 core.assign_task(task)
                 self.waiting_queue.remove(task)
 
-    def add_task(self, task):
-        if self.allocate_resources(task):
-            core = self.select_core(task)
-            core.assign_task(task)
-        else:
-            self.waiting_queue.append(task)
-            task.state = Task_State.WAITING
-
-    def select_core(self, task):
-        return self.cores[task.destination_CPU_number - 1]
+    def draw_gantt_chart(self):
+        for core in self.cores:
+            super().draw_gantt_chart(core)
 
 
 class Subsystem_2(Subsystem):
@@ -143,6 +265,16 @@ class Subsystem_2(Subsystem):
             status += f"        Core{core.id}:\n"
             status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
             status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}\n"
+
+            t = self.time
+            core.from_x.append(t)
+            core.to_x.append(t + 1)
+
+            if core.current_task is not None:  # core is not idle
+                core.y_axis.append(f"{core.current_task.name}")
+            else:  # core is idle
+                core.y_axis.append("IDLE")
+
         return status
 
     def execute(self):
@@ -193,6 +325,10 @@ class Subsystem_2(Subsystem):
                 task.has_all_resources = False
                 task.remaining_time = task.execution_time
 
+    def draw_gantt_chart(self):
+        for core in self.cores:
+            super().draw_gantt_chart(core)
+
 
 class Subsystem_3(Subsystem):
     def __init__(self, id, num_cores, resources):
@@ -225,7 +361,6 @@ class Subsystem_3(Subsystem):
         hp = temp[0]
         for i in temp[1:]:
             hp = hp * i // gcd(hp, i)
-        # print("Hyperperiod:", hp)
         return hp
 
     def schedulablity(self):
@@ -280,7 +415,7 @@ class Subsystem_3(Subsystem):
         min_period = float("inf")
 
         for task in self.ready_queue:
-            if task.remaining_time - 1 != 0:  # Task is ready
+            if task.remaining_time != 0:  # Task is ready
                 if task.period < min_period:
                     min_period = task.period
                     priority_task = task
@@ -315,7 +450,7 @@ class Subsystem_3(Subsystem):
         for task in self.ready_queue:
             task.period -= 1
             if task.period == 0:
-                task.remaining_time = task.execution_time + 1
+                task.remaining_time = task.execution_time
                 task.period = task.backup_period
                 task.number_of_repeat_times -= 1
                 if task.number_of_repeat_times == 0:
@@ -328,23 +463,9 @@ class Subsystem_3(Subsystem):
                 core.assign_task(task)
                 self.waiting_queue.remove(task)
 
-    def drawGantt(self):
-        """
-        The scheduled results are displayed in the form of a
-        gantt chart for the user to get better understanding
-        """
-        n = len(self.ready_queue)
-        colors = ["red", "green", "blue", "orange", "yellow"]
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        # the data is plotted from_x to to_x along y_axis
-        ax = plt.hlines(y_axis, from_x, to_x, linewidth=20, color=colors[n - 1])
-        plt.title("Rate Monotonic scheduling")
-        plt.grid(True)
-        plt.xlabel("Real-Time clock")
-        plt.ylabel("HIGH------------------Priority--------------------->LOW")
-        plt.xticks(np.arange(min(from_x), max(to_x) + 1, 1.0))
-        plt.show()
+    def draw_gantt_chart(self):
+        for core in self.cores:
+            super().draw_gantt_chart(core)
 
 
 class Subsystem_4(Subsystem):
@@ -366,6 +487,16 @@ class Subsystem_4(Subsystem):
             status += f"        Core{core.id}:\n"
             status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
             status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}\n"
+
+            t = self.time
+            core.from_x.append(t)
+            core.to_x.append(t + 1)
+
+            if core.current_task is not None:  # core is not idle
+                core.y_axis.append(f"{core.current_task.name}")
+            else:  # core is idle
+                core.y_axis.append("IDLE")
+
         return status
 
     def execute(self):
@@ -430,3 +561,7 @@ class Subsystem_4(Subsystem):
             self.waiting_queue.append(task)
             with self.lock:
                 self.file.write(f"Task [{task.name}] appended to waiting queue !\n")
+
+    def draw_gantt_chart(self):
+        for core in self.cores:
+            super().draw_gantt_chart(core)
