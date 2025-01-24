@@ -23,7 +23,7 @@ SubSubsystem 2:
 Time: 2
 Task [T23] arrived !
 Resources were not allocated to task [T23] !
-Task [T21] preemped !
+Task [T21] preempted !
 Task [T23] assigned to CPU !
 SubSubsystem 2:
         Resources: R1: 0 R2: 0
@@ -36,7 +36,7 @@ SubSubsystem 2:
 Time: 3
 Task [T24] arrived !
 Resources were not allocated to task [T24] !
-Task [T22] preemped !
+Task [T22] preempted !
 Task [T24] assigned to CPU !
 Deadlock has occurred !!!!!
 SubSubsystem 2:

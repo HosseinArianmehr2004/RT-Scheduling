@@ -39,7 +39,7 @@ SubSubsystem 4:
         Waiting Queue: ['T41']
         Ready Queue: []
         Core1:
-                Running Task: T42, remaining time: 4
+                Running Task: T42, remaining time: 3
         Core2:
                 Running Task: T43, remaining time: 7
 

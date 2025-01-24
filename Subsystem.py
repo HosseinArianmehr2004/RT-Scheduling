@@ -1,5 +1,6 @@
 # from sys import *
 import heapq
+import threading
 from math import gcd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -124,6 +125,7 @@ class Subsystem_2(Subsystem):
     def __init__(self, id, num_cores, resources):
         super().__init__(id, resources)
         self.cores = [Core_2(i, self) for i in range(num_cores)]
+        self.lock = threading.Lock()
 
     def get_status(self):
         status = f"Sub{self.id}:\n"
@@ -136,15 +138,22 @@ class Subsystem_2(Subsystem):
         return status
 
     def execute(self):
+        # Execute with thread
+        threads = []
         for core in self.cores:
-            core.execute()
+            thread = threading.Thread(target=core.execute)
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()
 
     def add_task(self, task):
         # Add a task to the ready queue
         task.state = Task_State.READY
         heapq.heappush(self.ready_queue, task)
 
-        # Assign task to core
+        # Assign task to cores
         assigned = False
         for core in self.cores:
             if self.ready_queue:
@@ -167,7 +176,8 @@ class Subsystem_2(Subsystem):
                     count += 1
 
         if count == 2:  # Deadlock has occurred.
-            self.file.write(f"Deadlock has occurred !!!!!\n")
+            with self.lock:
+                self.file.write(f"Deadlock has occurred !!!!!\n")
 
             # Deadlock resolution
             for task in self.ready_queue:
@@ -325,6 +335,7 @@ class Subsystem_4(Subsystem):
         self.waiting_queue = []
         self.completed_tasks = []
         self.cores = [Core_4(i, self) for i in range(num_cores)]
+        self.lock = threading.Lock()
 
     def get_status(self):
         status = f"Sub{self.id}:\n"
@@ -340,7 +351,6 @@ class Subsystem_4(Subsystem):
         return status
 
     def execute(self):
-
         # Moving tasks from waiting queue to ready queue
         if self.waiting_queue:
             for _ in self.waiting_queue:
@@ -358,15 +368,22 @@ class Subsystem_4(Subsystem):
                 else:
                     self.waiting_queue.append(task)
 
-        # Assign task to core
+        # Assign task to cores
         for core in self.cores:
             if self.ready_queue:
                 if core.current_task is None:
                     core.assign_task()
                     break
 
+        # Execute with thread
+        threads = []
         for core in self.cores:
-            core.execute()
+            thread = threading.Thread(target=core.execute)
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()
 
     def add_task(self, task):
         # For prerequisite tasks
@@ -383,12 +400,15 @@ class Subsystem_4(Subsystem):
             if self.allocate_resources(task):
                 task.state = Task_State.READY
                 self.ready_queue.append(task)
-                self.file.write(f"Task [{task.name}] appended to ready queue !\n")
+                with self.lock:
+                    self.file.write(f"Task [{task.name}] appended to ready queue !\n")
             else:
                 task.state = Task_State.WAITING
                 self.waiting_queue.append(task)
-                self.file.write(f"Task [{task.name}] appended to waiting queue !\n")
+                with self.lock:
+                    self.file.write(f"Task [{task.name}] appended to waiting queue !\n")
         else:
             task.state = Task_State.WAITING
             self.waiting_queue.append(task)
-            self.file.write(f"Task [{task.name}] appended to waiting queue !\n")
+            with self.lock:
+                self.file.write(f"Task [{task.name}] appended to waiting queue !\n")

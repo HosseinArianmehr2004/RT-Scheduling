@@ -216,11 +216,15 @@ def main():
             )
         )
 
+    for subsystem in range(1, 5):
+        with open(f"./output/subsystem{subsystem}_log.txt", "w"):
+            pass
+
     subsystem_files = {
-        1: open(f"./output/subsystem1_log.txt", "w"),
-        2: open(f"./output/subsystem2_log.txt", "w"),
-        3: open(f"./output/subsystem3_log.txt", "w"),
-        4: open(f"./output/subsystem4_log.txt", "w"),
+        1: open(f"./output/subsystem1_log.txt", "a"),
+        2: open(f"./output/subsystem2_log.txt", "a"),
+        3: open(f"./output/subsystem3_log.txt", "a"),
+        4: open(f"./output/subsystem4_log.txt", "a"),
     }
 
     subsystem1.set_file(subsystem_files[1])
@@ -229,7 +233,7 @@ def main():
     subsystem4.set_file(subsystem_files[4])
 
     time_range = 20
-    
+
     for time in range(time_range):
         with open(f"./output/time_{time}.txt", "w"):
             pass
@@ -238,22 +242,26 @@ def main():
     threads = []
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem1, tasks1, time_range, subsystem_files[1], 1)
+            target=run_subsystem,
+            args=(subsystem1, tasks1, time_range, subsystem_files[1], 1),
         )
     )
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem2, tasks2, time_range, subsystem_files[2], 2)
+            target=run_subsystem,
+            args=(subsystem2, tasks2, time_range, subsystem_files[2], 2),
         )
     )
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem3, tasks3, time_range, subsystem_files[3], 3)
+            target=run_subsystem,
+            args=(subsystem3, tasks3, time_range, subsystem_files[3], 3),
         )
     )
     threads.append(
         threading.Thread(
-            target=run_subsystem, args=(subsystem4, tasks4, time_range, subsystem_files[4], 4)
+            target=run_subsystem,
+            args=(subsystem4, tasks4, time_range, subsystem_files[4], 4),
         )
     )
 

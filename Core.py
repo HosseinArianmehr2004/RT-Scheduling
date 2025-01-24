@@ -1,5 +1,6 @@
 # from sys import *
 import heapq
+import threading
 import random
 from Task import *
 
@@ -127,30 +128,37 @@ class Core_2(Core):
     def __init__(self, id, subsystem):
         super().__init__(id, subsystem)
         self.ready_queue = subsystem.ready_queue
+        self.lock = threading.Lock()
 
     def assign_task(self):
         task = heapq.heappop(self.ready_queue)
         if not task.has_all_resources:
             if self.subsystem.allocate_resources(task):
-                self.subsystem.file.write(
-                    f"Resources allocated to task [{task.name}] !\n"
-                )
+                with self.lock:
+                    self.subsystem.file.write(
+                        f"Resources allocated to task [{task.name}] !\n"
+                    )
             else:
-                self.subsystem.file.write(
-                    f"Resources were not allocated to task [{task.name}] !\n"
-                )
+                with self.lock:
+                    self.subsystem.file.write(
+                        f"Resources were not allocated to task [{task.name}] !\n"
+                    )
         if self.current_task is None:
             self.current_task = task
             self.current_task.state = Task_State.RUNNING
         else:
             self.current_task.state = Task_State.READY
-            self.subsystem.file.write(f"Task [{self.current_task.name}] preemped !\n")
+            with self.lock:
+                self.subsystem.file.write(
+                    f"Task [{self.current_task.name}] preempted !\n"
+                )
             heapq.heappush(self.ready_queue, self.current_task)
             self.current_task = task
             self.current_task.state = Task_State.RUNNING
-            self.subsystem.file.write(
-                f"Task [{self.current_task.name}] assigned to CPU !\n"
-            )
+            with self.lock:
+                self.subsystem.file.write(
+                    f"Task [{self.current_task.name}] assigned to CPU !\n"
+                )
 
     def execute(self):
         if self.current_task is not None:
@@ -163,9 +171,10 @@ class Core_2(Core):
             if self.current_task.remaining_time == 0:  # Task completed
                 self.current_task.state = Task_State.COMPLETED
                 self.subsystem.release_resources(self.current_task)
-                self.subsystem.file.write(
-                    f"Task [{self.current_task.name}] completed !\n"
-                )
+                with self.lock:
+                    self.subsystem.file.write(
+                        f"Task [{self.current_task.name}] completed !\n"
+                    )
 
                 # Assign new task to core
                 self.current_task = None
@@ -220,15 +229,17 @@ class Core_4(Core):
                 random_number = random.random()
                 if random_number < 0.3:
                     self.current_task.remaining_time += 1
-                    self.subsystem.file.write(
-                        f"Task [{self.current_task.name}] failed !\n"
-                    )
+                    with self.subsystem.lock:
+                        self.subsystem.file.write(
+                            f"Task [{self.current_task.name}] failed !\n"
+                        )
 
             if self.current_task.remaining_time == 0:  # Task completed
                 self.current_task.state = Task_State.COMPLETED
                 self.subsystem.completed_tasks.append(self.current_task)
                 self.subsystem.release_resources(self.current_task)
-                self.subsystem.file.write(
-                    f"Task [{self.current_task.name}] completed !\n"
-                )
+                with self.subsystem.lock:
+                    self.subsystem.file.write(
+                        f"Task [{self.current_task.name}] completed !\n"
+                    )
                 self.current_task = None
