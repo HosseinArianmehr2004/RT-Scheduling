@@ -70,6 +70,7 @@ class Subsystem_1(Subsystem):
         super().__init__(id, resources)
         self.waiting_queue = []
         self.cores = [Core_1(i, self) for i in range(num_cores)]
+        self.lock = threading.Lock()
 
     def load_balancing(self):
         # Identify underloaded and overloaded cores
@@ -90,14 +91,21 @@ class Subsystem_1(Subsystem):
                     )  # Take the last task from the ready queue
                     underloaded_core.assign_task(task)
                     task.state = Task_State.READY  # Update the task state
-                    self.file.write(
-                        f"{task.name} migrated from Core {overloaded_core.id} to Core {underloaded_core.id}\n"
-                    )
+                    with self.lock:  # استفاده از قفل هنگام نوشتن در فایل
+                        self.file.write(
+                            f"{task.name} migrated from Core {overloaded_core.id} to Core {underloaded_core.id}\n"
+                        )
                     break  # Move to the next underloaded core after transferring one task
 
     def execute(self):
+        threads = []
         for core in self.cores:
-            core.execute()
+            thread = threading.Thread(target=core.execute)
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()
 
         if self.time % 4 == 0:
             self.load_balancing()
@@ -191,6 +199,7 @@ class Subsystem_3(Subsystem):
         super().__init__(id, resources)
         self.waiting_queue = []
         self.cores = [Core_3(i, self) for i in range(num_cores)]
+        self.lock = threading.Lock()
 
         self.is_schedulable = None
         self.hyper_period = None
@@ -248,7 +257,7 @@ class Subsystem_3(Subsystem):
             T.sort()
             for i in range(len(T)):
                 if T[i] % T[0] == 0:
-                    count = count + 1
+                    count += 1
 
             # Checking the schedulablity condition
             if U_factor <= sched_util or count == len(T):
@@ -291,7 +300,16 @@ class Subsystem_3(Subsystem):
 
         priority_task = self.give_next_task()
         self.cores[0].assign_task(priority_task)
-        self.cores[0].execute()
+
+        # Execute with thread
+        threads = []
+        for core in self.cores:
+            thread = threading.Thread(target=core.execute)
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()
 
         # Update Period after each clock cycle
         for task in self.ready_queue:

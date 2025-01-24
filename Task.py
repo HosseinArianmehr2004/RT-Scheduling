@@ -34,7 +34,7 @@ class Task:
         self.prerequisite_task_name = prerequisite_task_name
 
         self.state = Task_State.READY
-        self.remaining_time = execution_time + 1
+        self.remaining_time = execution_time
 
         self.has_all_resources = False
         self.remaining_quantum = 0

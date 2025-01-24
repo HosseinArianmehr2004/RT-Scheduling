@@ -6,7 +6,7 @@ SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []
         Core1:
-                Running Task: T32, remaining time: 2, number of repeat times: 10
+                Running Task: T32, remaining time: 1, number of repeat times: 10
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 1
@@ -14,7 +14,7 @@ SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []
         Core1:
-                Running Task: T32, remaining time: 1, number of repeat times: 10
+                Running Task: T33, remaining time: 1, number of repeat times: 10
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 2
@@ -22,7 +22,7 @@ SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []
         Core1:
-                Running Task: T33, remaining time: 2, number of repeat times: 10
+                Running Task: T31, remaining time: 2, number of repeat times: 2
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 3
@@ -30,7 +30,7 @@ SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []
         Core1:
-                Running Task: T33, remaining time: 1, number of repeat times: 10
+                Running Task: T31, remaining time: 1, number of repeat times: 2
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 4
@@ -38,7 +38,7 @@ SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []
         Core1:
-                Running Task: T31, remaining time: 3, number of repeat times: 2
+                Running Task: ---, remaining time: -, number of repeat times: -
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 5
@@ -62,7 +62,7 @@ SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []
         Core1:
-                Running Task: T31, remaining time: 2, number of repeat times: 2
+                Running Task: ---, remaining time: -, number of repeat times: -
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 8
@@ -70,7 +70,7 @@ SubSubsystem 3:
         Resources: R1: 4 R2: 10
         Waiting Queue []
         Core1:
-                Running Task: T31, remaining time: 1, number of repeat times: 2
+                Running Task: ---, remaining time: -, number of repeat times: -
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 9
