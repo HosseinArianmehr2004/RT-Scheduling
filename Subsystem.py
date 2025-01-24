@@ -217,6 +217,7 @@ class Subsystem_1(Subsystem):
                 if core.current_task.remaining_time == 0:
                     core.current_task.state = Task_State.COMPLETED
                     self.release_resources(core.current_task)
+                    core.current_task.finish_execution_time = self.time
 
                     core.current_task = None
                     if core.ready_queue:
@@ -245,6 +246,8 @@ class Subsystem_1(Subsystem):
                 core = self.select_core(task)
                 core.assign_task(task)
                 self.waiting_queue.remove(task)
+            else:
+                task.waiting_time += 1
 
     def draw_gantt_chart(self):
         for core in self.cores:
@@ -455,6 +458,8 @@ class Subsystem_3(Subsystem):
                 task.number_of_repeat_times -= 1
                 if task.number_of_repeat_times == 0:
                     self.ready_queue.remove(task)
+                    task.state = Task_State.COMPLETED
+                    task.finish_execution_time = self.time
 
         # Check waiting queue and try to assign tasks
         for task in self.waiting_queue[:]:
@@ -462,6 +467,8 @@ class Subsystem_3(Subsystem):
                 core = self.select_core(task)
                 core.assign_task(task)
                 self.waiting_queue.remove(task)
+            else:
+                task.waiting_time += 1
 
     def draw_gantt_chart(self):
         for core in self.cores:
@@ -513,8 +520,10 @@ class Subsystem_4(Subsystem):
                         task.arrival_time = self.time
                         self.ready_queue.append(task)
                     else:
+                        task.waiting_time += 1
                         self.waiting_queue.append(task)
                 else:
+                    task.waiting_time += 1
                     self.waiting_queue.append(task)
 
         # Assign task to cores

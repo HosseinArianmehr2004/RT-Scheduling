@@ -37,5 +37,5 @@ SubSubsystem_4:
         Core1:
                 Running Task: T42, remaining time: 1
         Core2:
-                Running Task: T43, remaining time: 5
+                Running Task: T43, remaining time: 3
 

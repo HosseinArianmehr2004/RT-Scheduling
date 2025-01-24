@@ -40,6 +40,13 @@ class Task:
         self.remaining_quantum = 0
         self.prerequisite = False
 
+        # For final report
+        self.start_execution_time = None
+        self.start_time_bool = False
+        self.finish_execution_time = None
+        self.waiting_time = 0
+        self.execution_cores = []
+
     # For sub 2
     def __lt__(self, other):
         return self.remaining_time < other.remaining_time

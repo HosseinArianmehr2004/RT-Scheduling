@@ -235,6 +235,9 @@ def main():
         with open(f"./output/time_{time}.txt", "w"):
             pass
 
+    # with open(f".out.txt", "w"):
+    #     pass
+
     # Create threads for each subsystem
     threads = []
     threads.append(
@@ -274,10 +277,90 @@ def main():
     for file in subsystem_files.values():
         file.close()
 
+    # Writing to the file out.txt
+    with open("out.txt", "w") as out_file:
+        for time in range(time_range):
+            with open(f"./output/time_{time}.txt", "r") as time_file:
+                content = time_file.read()
+                out_file.write(content)
+
     subsystem1.draw_gantt_chart()
     subsystem2.draw_gantt_chart()
     subsystem3.draw_gantt_chart()
     subsystem4.draw_gantt_chart()
+
+    # Final report
+    with open(f"./output/final_report.txt", "w"):
+        pass
+    with open(f"./output/final_report.txt", "a") as final_report_file:
+        for task in tasks1:
+            final_report_file.write(f"Task [{task.name}] :\n")
+            final_report_file.write(
+                f"        Start of execution time is : [{task.start_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Finish of execution time is : [{task.finish_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Time spent in the waiting queue is : [{task.waiting_time}]\n"
+            )
+            final_report_file.write(
+                f"        The subsystem that executed the task is : [Subsystem 1]\n"
+            )
+            final_report_file.write(
+                f"        Cores that executed the task are : {task.execution_cores}\n\n"
+            )
+        for task in tasks2:
+            final_report_file.write(f"Task [{task.name}] :\n")
+            final_report_file.write(
+                f"        Start of execution time is : [{task.start_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Finish of execution time is : [{task.finish_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Time spent in the waiting queue is : [0]\n"
+            )
+            final_report_file.write(
+                f"        The subsystem that executed the task is : [Subsystem 2]\n"
+            )
+            final_report_file.write(
+                f"        Cores that executed the task are : {task.execution_cores}\n\n"
+            )
+        for task in tasks3:
+            final_report_file.write(f"Task [{task.name}] :\n")
+            final_report_file.write(
+                f"        Start of execution time is : [{task.start_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Finish of execution time is : [{task.finish_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Time spent in the waiting queue is : [{task.waiting_time}]\n"
+            )
+            final_report_file.write(
+                f"        The subsystem that executed the task is : [Subsystem 3]\n"
+            )
+            final_report_file.write(
+                f"        Cores that executed the task are : {task.execution_cores}\n\n"
+            )
+        for task in tasks4:
+            final_report_file.write(f"Task [{task.name}] :\n")
+            final_report_file.write(
+                f"        Start of execution time is : [{task.start_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Finish of execution time is : [{task.finish_execution_time}]\n"
+            )
+            final_report_file.write(
+                f"        Time spent in the waiting queue is : [{task.waiting_time}]\n"
+            )
+            final_report_file.write(
+                f"        The subsystem that executed the task is : [Subsystem 4]\n"
+            )
+            final_report_file.write(
+                f"        Cores that executed the task are : {task.execution_cores}\n\n"
+            )
 
 
 if __name__ == "__main__":

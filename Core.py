@@ -51,8 +51,21 @@ class Core_1(Core):
     def execute(self):
         if self.current_task is not None:
             if self.subsystem.time - self.current_task.arrival_time != 0:
+                if not self.current_task.start_time_bool:
+                    self.current_task.start_execution_time = self.subsystem.time - 1
+                    self.current_task.start_time_bool = True
+
                 self.current_task.remaining_time -= 1
                 self.current_task.remaining_quantum -= 1
+
+            execution_core = False
+            if self.current_task.execution_cores:
+                for core in self.current_task.execution_cores:
+                    if self.id == core:
+                        execution_core = True
+                        break
+            if not execution_core:
+                self.current_task.execution_cores.append(self.id)
 
 
 class Core_2(Core):
@@ -99,9 +112,26 @@ class Core_2(Core):
             ):
                 self.current_task.remaining_time -= 1
 
+            if (
+                self.current_task.execution_time == self.current_task.remaining_time
+                and not self.current_task.start_time_bool
+            ):
+                self.current_task.start_execution_time = self.subsystem.time
+                self.current_task.start_time_bool = True
+
+            execution_core = False
+            if self.current_task.execution_cores:
+                for core in self.current_task.execution_cores:
+                    if self.id == core:
+                        execution_core = True
+                        break
+            if not execution_core:
+                self.current_task.execution_cores.append(self.id)
+
             if self.current_task.remaining_time == 0:  # Task completed
                 self.current_task.state = Task_State.COMPLETED
                 self.subsystem.release_resources(self.current_task)
+                self.current_task.finish_execution_time = self.subsystem.time
                 with self.lock:
                     self.subsystem.file.write(
                         f"Task [{self.current_task.name}] completed !\n"
@@ -136,7 +166,22 @@ class Core_3(Core):
 
         if self.current_task is not None:  # core is not idle
             self.y_axis.append(f"{self.current_task.name}")
+            if (
+                self.current_task.execution_time == self.current_task.remaining_time
+                and not self.current_task.start_time_bool
+            ):
+                self.current_task.start_execution_time = self.subsystem.time
+                self.current_task.start_time_bool = True
             self.current_task.remaining_time -= 1
+
+            execution_core = False
+            if self.current_task.execution_cores:
+                for core in self.current_task.execution_cores:
+                    if self.id == core:
+                        execution_core = True
+                        break
+            if not execution_core:
+                self.current_task.execution_cores.append(self.id)
         else:  # core is idle
             self.y_axis.append("IDLE")
 
@@ -165,10 +210,27 @@ class Core_4(Core):
                             f"Task [{self.current_task.name}] failed !\n"
                         )
 
+            if (
+                self.current_task.execution_time == self.current_task.remaining_time
+                and not self.current_task.start_time_bool
+            ):
+                self.current_task.start_execution_time = self.subsystem.time
+                self.current_task.start_time_bool = True
+
+            execution_core = False
+            if self.current_task.execution_cores:
+                for core in self.current_task.execution_cores:
+                    if self.id == core:
+                        execution_core = True
+                        break
+            if not execution_core:
+                self.current_task.execution_cores.append(self.id)
+
             if self.current_task.remaining_time == 0:  # Task completed
                 self.current_task.state = Task_State.COMPLETED
                 self.subsystem.completed_tasks.append(self.current_task)
                 self.subsystem.release_resources(self.current_task)
+                self.current_task.finish_execution_time = self.subsystem.time
                 with self.subsystem.lock:
                     self.subsystem.file.write(
                         f"Task [{self.current_task.name}] completed !\n"

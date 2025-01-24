@@ -31,11 +31,11 @@ SubSubsystem_3:
 
 Time: 13
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
-        Waiting Queue: ['T44']
+        Resources: R1: 1 R2: 1
+        Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T44, remaining time: 1
         Core2:
                 Running Task: ---, remaining time: -
 
