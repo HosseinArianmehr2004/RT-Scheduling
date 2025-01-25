@@ -1,6 +1,5 @@
 import heapq
 import threading
-from math import gcd
 import matplotlib.pyplot as plt
 import numpy as np
 from Task import *
@@ -18,20 +17,6 @@ class Subsystem(threading.Thread):
         self.time = None
 
         self.main_system = main_system
-
-    def get_status(self):
-        status = f"Sub{self.id}:\n"
-        status += f"        Resources: R1: {self.resources['R1'].available_units} R2: {self.resources['R2'].available_units}\n"
-        status += (
-            f"        Waiting Queue {[task.name for task in self.waiting_queue]}\n"
-        )
-        for core in self.cores:
-            status += f"        Core{core.id}:\n"
-            status += f"                Running Task: {core.current_task.name if core.current_task else '---'}"
-            status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}"
-            status += f", remaining quantum: {core.current_task.remaining_quantum if core.current_task else '-'}\n"
-            status += f"                Ready Queue: {[task.name for task in core.ready_queue]}\n"
-        return status
 
     def allocate_resources(self, task):
         for resource, needed in task.resources_needed.items():
@@ -51,17 +36,11 @@ class Subsystem(threading.Thread):
             self.file.write(f"{needed} instances of {resource}, ")
         self.file.write(f"released by {task.name}\n")
 
-    def execute(self):
-        pass
-
     def set_file(self, file):
         self.file = file
 
     def set_time(self, time):
         self.time = time
-
-    def add_task(self, task):
-        pass
 
     def draw_gantt_chart(self, core):
         """

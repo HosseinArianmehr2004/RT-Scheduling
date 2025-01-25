@@ -22,12 +22,6 @@ class MainSystem:
         self.total_time = total_time
         self.condition = threading.Condition()
 
-    # def run(self):
-    #     for self.time in range(self.total_time):
-    #         with self.condition:
-    #             print(f"Main System Time: {self.time}")
-    #             self.condition.notify_all()  # Notify all subsystems
-
     def run(self):
         # Reading information from the file
         filename = "in.txt"
@@ -257,10 +251,6 @@ class MainSystem:
                             subsystem4.add_task(task)
 
                     # # Execute tasks in each subsystem
-                    # subsystem1.execute()
-                    # subsystem2.execute()
-                    # subsystem3.execute()
-                    # subsystem4.execute()
                     self.condition.notify_all()  # Notify all subsystems
                     self.condition.wait(0.01)  # Wait for a maximum of 1 second
 
@@ -276,8 +266,6 @@ class MainSystem:
                         status_info = str(subsystem_status[i])
                         time_file.write(f"{status_info}\n")
                         subsystem_files[i].write(f"{status_info}\n")
-
-            # TTT.sleep(0.1)  # Simulate time passing
 
         subsystem1.draw_gantt_chart()
         subsystem2.draw_gantt_chart()
@@ -296,9 +284,9 @@ class MainSystem:
                     out_file.write(content)
 
         # Final report
-        with open(f"./output/final_report.txt", "w"):
+        with open(f"final_report.txt", "w"):
             pass
-        with open(f"./output/final_report.txt", "a") as final_report_file:
+        with open(f"final_report.txt", "a") as final_report_file:
             for task in tasks1:
                 final_report_file.write(f"Task [{task.name}] :\n")
                 final_report_file.write(
