@@ -172,7 +172,10 @@ class Core_3(Core):
             ):
                 self.current_task.start_execution_time = self.subsystem.time
                 self.current_task.start_time_bool = True
+
             self.current_task.remaining_time -= 1
+            if self.current_task.remaining_time == 0:
+                self.current_task.number_of_repeat_times -= 1
 
             execution_core = False
             if self.current_task.execution_cores:
@@ -189,6 +192,7 @@ class Core_3(Core):
 class Core_4(Core):
     def __init__(self, id, subsystem):
         super().__init__(id, subsystem)
+        self.ready_queue = subsystem.ready_queue
 
     def assign_task(self):
         if self.subsystem.ready_queue:

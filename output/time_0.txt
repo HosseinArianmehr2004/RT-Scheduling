@@ -29,16 +29,16 @@ Task [T31] arrived !
 Task [T32] arrived !
 Task [T33] arrived !
 SubSubsystem_3:
-        Resources: R1: 4 R2: 10
+        Resources: R1: 2 R2: 0
         Waiting Queue []
         Core1:
-                Running Task: T32, remaining time: 1, number of repeat times: 10
+                Running Task: T32, remaining time: 1, number of repeat times: 4
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 0
 Task [T41] arrived !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 2
         Waiting Queue: ['T41']
         Ready Queue: []
         Core1:

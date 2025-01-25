@@ -37,6 +37,8 @@ class Task:
         self.remaining_time = execution_time
 
         self.has_all_resources = False
+        self.has_Ri = {"R1": False, "R2": False}
+
         self.remaining_quantum = 0
         self.prerequisite = False
 
@@ -44,6 +46,7 @@ class Task:
         self.start_execution_time = None
         self.start_time_bool = False
         self.finish_execution_time = None
+        self.waiting_time = 0
         self.waiting_time = 0
         self.execution_cores = []
 

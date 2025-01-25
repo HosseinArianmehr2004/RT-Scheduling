@@ -36,12 +36,17 @@ class Subsystem:
                 return False
         for resource, needed in task.resources_needed.items():
             self.resources[resource].available_units -= needed
+            self.file.write(
+                f"{needed} instances of {resource} were allocated to {task.name}\n"
+            )
         task.has_all_resources = True
         return True
 
     def release_resources(self, task):
         for resource, needed in task.resources_needed.items():
             self.resources[resource].available_units += needed
+            self.file.write(f"{needed} instances of {resource}, ")
+        self.file.write(f"released by {task.name}\n")
 
     def execute(self):
         pass
@@ -187,14 +192,12 @@ class Subsystem_1(Subsystem):
             ) + 1
             if task.remaining_quantum == 1:
                 task.remaining_quantum += 1
-            self.file.write(
-                f"{task.name} remaining quantum: {task.remaining_quantum}\n"
-            )
+            self.file.write(f"{task.name} quantum: {task.remaining_quantum}\n")
 
     def add_task(self, task):
+        core = self.select_core(task)
+        self.set_task_quantum(task, core)
         if self.allocate_resources(task):
-            core = self.select_core(task)
-            self.set_task_quantum(task, core)
             core.assign_task(task)
         else:
             self.waiting_queue.append(task)
@@ -365,7 +368,13 @@ class Subsystem_3(Subsystem):
         self.lock = threading.Lock()
 
         self.is_schedulable = None
-        self.hyper_period = None
+        self.subsystems = []
+        self.allocation = (
+            {}
+        )  # to store the subsystem and the number of resource allocated to a task
+
+    def set_subsystems(self, subsystems):
+        self.subsystems = subsystems
 
     def get_status(self):
         status = f"Sub{self.id}:\n"
@@ -379,16 +388,8 @@ class Subsystem_3(Subsystem):
             status += f", remaining time: {core.current_task.remaining_time if core.current_task else '-'}"
             status += f", number of repeat times: {core.current_task.number_of_repeat_times if core.current_task else '-'}\n"
             status += f"                Ready Queue: {[task.name for task in core.ready_queue]}\n"
-        return status
 
-    def hyperperiod(self):
-        temp = []
-        for task in self.ready_queue:
-            temp.append(task.period)
-        hp = temp[0]
-        for i in temp[1:]:
-            hp = hp * i // gcd(hp, i)
-        return hp
+        return status
 
     def schedulablity(self):
         """
@@ -410,10 +411,10 @@ class Subsystem_3(Subsystem):
 
         U_factor = sum(U)
         if U_factor <= 1:
-            print("Utilization factor: ", U_factor, "underloaded tasks")
+            self.file.write(f"Utilization factor: {U_factor} underloaded tasks\n")
 
             sched_util = n * (2 ** (1 / n) - 1)
-            print("Checking condition: ", sched_util)
+            self.file.write(f"Checking condition: {sched_util}\n")
 
             count = 0
             T.sort()
@@ -423,13 +424,15 @@ class Subsystem_3(Subsystem):
 
             # Checking the schedulablity condition
             if U_factor <= sched_util or count == len(T):
-                print("Tasks are schedulable by Rate Monotonic Scheduling!")
+                self.file.write("Tasks are schedulable by Rate Monotonic Scheduling\n")
                 return True
             else:
-                print("Tasks are not schedulable by Rate Monotonic Scheduling!")
+                self.file.write(
+                    "Tasks are not schedulable by Rate Monotonic Scheduling !\n"
+                )
                 return False
-        print("Overloaded tasks!")
-        print("Utilization factor > 1")
+        self.file.write("Overloaded tasks !\n")
+        self.file.write("Utilization factor > 1\n")
         return False
 
     def check_validation(self):
@@ -450,15 +453,122 @@ class Subsystem_3(Subsystem):
         return priority_task
 
     def add_task(self, task):
-        task.state = Task_State.READY
-        self.ready_queue.append(task)
+        if self.allocate_resources(task):
+            self.allocation[task] = (self, self)
+            task.state = Task_State.READY
+            self.ready_queue.append(task)
+        else:
+            # task.state = Task_State.WAITING
+            # self.waiting_queue.append(task)
+
+            r1_sub = self.allocate_Ri(task, "R1")
+            r2_sub = self.allocate_Ri(task, "R2")
+
+            if task.has_Ri["R1"] and task.has_Ri["R2"]:
+                task.has_all_resources = True
+                task.state = Task_State.READY
+                task.execution_time *= 0.5
+                task.remaining_time = task.execution_time
+                self.ready_queue.append(task)
+                self.allocation[task] = (r1_sub, r2_sub)
+                r1_needed = task.resources_needed["R1"]
+                r2_needed = task.resources_needed["R2"]
+                self.file.write(
+                    f"{r1_sub.id} allocate {r1_needed} instances of R1 to {task.name}\n"
+                )
+                self.file.write(
+                    f"{r2_sub.id} allocate {r2_needed} instances of R2 to {task.name}\n"
+                )
+            else:
+                self.file.write(
+                    f"There aren't enough resources for {task.name} in any subsystem\n"
+                )
+                self.file.write(f"{task.name} can not be schedulled !\n")
+
+    def allocate_Ri(self, task, Ri):
+        needed = task.resources_needed[Ri]
+        ri_sub = None  # the syubsystem that gives Ri to the task
+
+        # check if self has enough resource Ri
+        if self.resources[Ri].available_units >= needed:
+            self.resources[Ri].available_units -= needed
+            ri_sub = self
+            task.has_Ri[Ri] = True
+
+        # check if self has enough free resource Ri
+        if not task.has_Ri[Ri]:
+            for sub in self.subsystems:
+                if sub.resources[Ri].available_units >= needed:
+                    sub.resources[Ri].available_units -= needed
+                    ri_sub = sub
+                    task.has_Ri[Ri] = True
+                    sub.file.write(
+                        f"{needed} instances of {Ri} were allocated to {task.name}\n"
+                    )
+                    break
+
+        # free tasks resources (the ones that are in subs ready queue)
+        if not task.has_Ri[Ri]:
+            for sub in self.subsystems:
+                for core in sub.cores:
+                    for ready_task in core.ready_queue:
+                        sub.release_resources(ready_task)
+                        core.ready_queue.remove(ready_task)
+                        ready_task.state = Task_State.WAITING
+                        sub.waiting_queue.append(ready_task)
+                        sub.file.write(
+                            f"resources of {ready_task.name} released to allocate to {task.name} in subsystem 3\n"
+                        )
+                        sub.file.write(f"{ready_task.name} moved to waiting queue\n\n")
+
+                        if sub.resources[Ri].available_units >= needed:
+                            sub.resources[Ri].available_units -= needed
+                            ri_sub = sub
+                            task.has_Ri[Ri] = True
+                            sub.file.write(
+                                f"{needed} instances of {Ri} were allocated to {task.name}\n"
+                            )
+                            break
+
+                    if task.has_Ri[Ri]:
+                        break
+
+                if task.has_Ri[Ri]:
+                    break
+
+        return ri_sub
+
+    def release_resources(self, task):
+        sub_1, sub_2 = self.allocation[task]
+        r1_needed = task.resources_needed["R1"]
+        r2_needed = task.resources_needed["R2"]
+        sub_1.resources["R1"].available_units += r1_needed
+        sub_2.resources["R2"].available_units += r2_needed
+        self.file.write(f"{task.name} finished execution:\n")
+        self.file.write(
+            f"    {r1_needed} instances of R1 returned to {sub_1.id}\n    {r2_needed} instances of R2 returned to {sub_2.id}\n"
+        )
+        if sub_1 != self:
+            sub_1.file.write(
+                f"{r1_needed} instances of R1 released by {task.name} from subsystem_3\n"
+            )
+        if sub_2 != self:
+            sub_2.file.write(
+                f"{r2_needed} instances of R2 released by {task.name} from subsystem_3\n"
+            )
 
     def execute(self):
         if self.time == 0:
             self.is_schedulable = self.schedulablity()
             if self.is_schedulable:
-                self.hyper_period = self.hyperperiod()
                 self.check_validation()
+
+        for task in self.ready_queue:
+            if task.number_of_repeat_times == 0:
+                self.release_resources(task)
+                self.ready_queue.remove(task)
+                task.state = Task_State.COMPLETED
+                task.finish_execution_time = self.time
 
         priority_task = self.give_next_task()
         self.cores[0].assign_task(priority_task)
@@ -479,11 +589,6 @@ class Subsystem_3(Subsystem):
             if task.period == 0:
                 task.remaining_time = task.execution_time
                 task.period = task.backup_period
-                task.number_of_repeat_times -= 1
-                if task.number_of_repeat_times == 0:
-                    self.ready_queue.remove(task)
-                    task.state = Task_State.COMPLETED
-                    task.finish_execution_time = self.time
 
         # Check waiting queue and try to assign tasks
         for task in self.waiting_queue[:]:

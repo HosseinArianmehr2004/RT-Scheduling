@@ -3,10 +3,10 @@ Task [T14] arrived !
 Task [T15] arrived !
 SubSubsystem_1:
         Resources: R1: 0 R2: 1
-        Waiting Queue ['T14']
+        Waiting Queue ['T14', 'T12', 'T13']
         Core1:
-                Running Task: T12, remaining time: 8, remaining quantum: 3
-                Ready Queue: ['T13', 'T11']
+                Running Task: T11, remaining time: 2, remaining quantum: 2
+                Ready Queue: []
         Core2:
                 Running Task: T15, remaining time: 9, remaining quantum: 2
                 Ready Queue: []
@@ -26,16 +26,16 @@ SubSubsystem_2:
 
 Time: 2
 SubSubsystem_3:
-        Resources: R1: 4 R2: 10
+        Resources: R1: 2 R2: 0
         Waiting Queue []
         Core1:
-                Running Task: T33, remaining time: 1, number of repeat times: 10
+                Running Task: T33, remaining time: 1.0, number of repeat times: 2
                 Ready Queue: ['T31', 'T32', 'T33']
 
 Time: 2
 Task [T43] arrived !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 0
+        Resources: R1: 0 R2: 0
         Waiting Queue: ['T41']
         Ready Queue: []
         Core1:

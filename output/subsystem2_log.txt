@@ -1,5 +1,7 @@
 Time: 0
 Task [T21] arrived !
+2 instances of R1 were allocated to T21
+1 instances of R2 were allocated to T21
 Resources allocated to task [T21] !
 SubSubsystem_2:
         Resources: R1: 0 R2: 1
@@ -11,6 +13,8 @@ SubSubsystem_2:
 
 Time: 1
 Task [T22] arrived !
+0 instances of R1 were allocated to T22
+1 instances of R2 were allocated to T22
 Resources allocated to task [T22] !
 SubSubsystem_2:
         Resources: R1: 0 R2: 0
@@ -39,6 +43,12 @@ Resources were not allocated to task [T24] !
 Task [T22] preempted !
 Task [T24] assigned to CPU !
 Deadlock has occurred !!!!!
+0 instances of R1, 1 instances of R2, released by T22
+2 instances of R1, 1 instances of R2, released by T21
+0 instances of R1 were allocated to T23
+1 instances of R2 were allocated to T23
+1 instances of R1 were allocated to T24
+1 instances of R2 were allocated to T24
 SubSubsystem_2:
         Resources: R1: 1 R2: 0
         Ready Queue: ['T22', 'T21']
@@ -84,9 +94,15 @@ SubSubsystem_2:
                 Running Task: T24, remaining time: 1
 
 Time: 8
+0 instances of R1, 1 instances of R2, released by T23
 Task [T23] completed !
+0 instances of R1 were allocated to T22
+1 instances of R2 were allocated to T22
 Resources allocated to task [T22] !
+1 instances of R1, 1 instances of R2, released by T24
 Task [T24] completed !
+2 instances of R1 were allocated to T21
+1 instances of R2 were allocated to T21
 Resources allocated to task [T21] !
 SubSubsystem_2:
         Resources: R1: 0 R2: 0
@@ -160,6 +176,7 @@ SubSubsystem_2:
                 Running Task: T21, remaining time: 2
 
 Time: 16
+0 instances of R1, 1 instances of R2, released by T22
 Task [T22] completed !
 SubSubsystem_2:
         Resources: R1: 0 R2: 1
@@ -170,6 +187,7 @@ SubSubsystem_2:
                 Running Task: T21, remaining time: 1
 
 Time: 17
+2 instances of R1, 1 instances of R2, released by T21
 Task [T21] completed !
 SubSubsystem_2:
         Resources: R1: 2 R2: 2

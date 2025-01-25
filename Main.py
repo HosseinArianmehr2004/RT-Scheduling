@@ -13,6 +13,12 @@ class Resource:
         self.total_units = total_units
         self.available_units = total_units
 
+    def __str__(self):
+        return f"{self.name}, available units: {self.available_units}"
+
+    def __repr__(self):
+        return f"[{self.name}, available units: {self.available_units}]"
+
 
 def run_subsystem(subsystem, tasks, time_range, subsystem_file, thread_id):
     global current_thread
@@ -96,6 +102,8 @@ def main():
             "R2": Resource("R2", int(resources[7])),
         },
     )
+
+    subsystem3.set_subsystems([subsystem1, subsystem4])
 
     # Getting tasks from the file
     count = 0

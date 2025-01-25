@@ -1,8 +1,9 @@
+5 instances of R1 were allocated to T31
 Time: 0
 Task [T41] arrived !
 Task [T41] appended to waiting queue !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 0 R2: 2
         Waiting Queue: ['T41']
         Ready Queue: []
         Core1:
@@ -12,9 +13,11 @@ SubSubsystem_4:
 
 Time: 1
 Task [T42] arrived !
+0 instances of R1 were allocated to T42
+1 instances of R2 were allocated to T42
 Task [T42] appended to ready queue !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 1
+        Resources: R1: 0 R2: 1
         Waiting Queue: ['T41']
         Ready Queue: []
         Core1:
@@ -24,9 +27,11 @@ SubSubsystem_4:
 
 Time: 2
 Task [T43] arrived !
+0 instances of R1 were allocated to T43
+1 instances of R2 were allocated to T43
 Task [T43] appended to ready queue !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 0
+        Resources: R1: 0 R2: 0
         Waiting Queue: ['T41']
         Ready Queue: []
         Core1:
@@ -38,146 +43,158 @@ Time: 3
 Task [T44] arrived !
 Task [T44] appended to waiting queue !
 Task [T42] failed !
-Task [T43] failed !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 0
+        Resources: R1: 0 R2: 0
         Waiting Queue: ['T44', 'T41']
         Ready Queue: []
         Core1:
                 Running Task: T42, remaining time: 2
         Core2:
-                Running Task: T43, remaining time: 6
+                Running Task: T43, remaining time: 5
 
 Time: 4
+Task [T42] failed !
+SubSubsystem_4:
+        Resources: R1: 0 R2: 0
+        Waiting Queue: ['T44', 'T41']
+        Ready Queue: []
+        Core1:
+                Running Task: T42, remaining time: 2
+        Core2:
+                Running Task: T43, remaining time: 4
+
+Time: 5
 Task [T43] failed !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 0
+        Resources: R1: 0 R2: 0
         Waiting Queue: ['T44', 'T41']
         Ready Queue: []
         Core1:
                 Running Task: T42, remaining time: 1
         Core2:
-                Running Task: T43, remaining time: 6
+                Running Task: T43, remaining time: 4
 
-Time: 5
+Time: 6
+0 instances of R1, 1 instances of R2, released by T42
 Task [T42] completed !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 1
+        Resources: R1: 0 R2: 1
         Waiting Queue: ['T44', 'T41']
         Ready Queue: []
         Core1:
                 Running Task: ---, remaining time: -
         Core2:
-                Running Task: T43, remaining time: 5
-
-Time: 6
-SubSubsystem_4:
-        Resources: R1: 0 R2: 0
-        Waiting Queue: ['T44']
-        Ready Queue: []
-        Core1:
-                Running Task: T41, remaining time: 3
-        Core2:
-                Running Task: T43, remaining time: 4
+                Running Task: T43, remaining time: 3
 
 Time: 7
-Task [T41] failed !
+Task [T43] failed !
 SubSubsystem_4:
-        Resources: R1: 0 R2: 0
-        Waiting Queue: ['T44']
+        Resources: R1: 0 R2: 1
+        Waiting Queue: ['T44', 'T41']
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 3
+                Running Task: ---, remaining time: -
         Core2:
                 Running Task: T43, remaining time: 3
 
 Time: 8
 SubSubsystem_4:
-        Resources: R1: 0 R2: 0
-        Waiting Queue: ['T44']
+        Resources: R1: 0 R2: 1
+        Waiting Queue: ['T44', 'T41']
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 2
+                Running Task: ---, remaining time: -
         Core2:
                 Running Task: T43, remaining time: 2
 
+5 instances of R1 released by T31 from subsystem_3
 Time: 9
+2 instances of R1 were allocated to T41
+1 instances of R2 were allocated to T41
 SubSubsystem_4:
-        Resources: R1: 0 R2: 0
+        Resources: R1: 3 R2: 0
         Waiting Queue: ['T44']
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 1
+                Running Task: T41, remaining time: 3
         Core2:
                 Running Task: T43, remaining time: 1
 
 Time: 10
-Task [T41] completed !
+Task [T41] failed !
+0 instances of R1, 1 instances of R2, released by T43
 Task [T43] completed !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 3 R2: 1
         Waiting Queue: ['T44']
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T41, remaining time: 3
         Core2:
                 Running Task: ---, remaining time: -
 
 Time: 11
+1 instances of R1 were allocated to T44
+1 instances of R2 were allocated to T44
+Task [T41] failed !
 SubSubsystem_4:
-        Resources: R1: 1 R2: 1
+        Resources: R1: 2 R2: 0
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T44, remaining time: 2
+                Running Task: T41, remaining time: 3
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T44, remaining time: 2
 
 Time: 12
-Task [T44] failed !
 SubSubsystem_4:
-        Resources: R1: 1 R2: 1
+        Resources: R1: 2 R2: 0
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T44, remaining time: 2
+                Running Task: T41, remaining time: 2
         Core2:
-                Running Task: ---, remaining time: -
+                Running Task: T44, remaining time: 1
 
 Time: 13
+Task [T41] failed !
+1 instances of R1, 1 instances of R2, released by T44
+Task [T44] completed !
 SubSubsystem_4:
-        Resources: R1: 1 R2: 1
+        Resources: R1: 3 R2: 1
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T44, remaining time: 1
+                Running Task: T41, remaining time: 2
         Core2:
                 Running Task: ---, remaining time: -
 
 Time: 14
-Task [T44] completed !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 3 R2: 1
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T41, remaining time: 1
         Core2:
                 Running Task: ---, remaining time: -
 
 Time: 15
+Task [T41] failed !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 3 R2: 1
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: ---, remaining time: -
+                Running Task: T41, remaining time: 1
         Core2:
                 Running Task: ---, remaining time: -
 
 Time: 16
+2 instances of R1, 1 instances of R2, released by T41
+Task [T41] completed !
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 5 R2: 2
         Waiting Queue: []
         Ready Queue: []
         Core1:
@@ -187,7 +204,7 @@ SubSubsystem_4:
 
 Time: 17
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 5 R2: 2
         Waiting Queue: []
         Ready Queue: []
         Core1:
@@ -197,7 +214,7 @@ SubSubsystem_4:
 
 Time: 18
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 5 R2: 2
         Waiting Queue: []
         Ready Queue: []
         Core1:
@@ -207,7 +224,7 @@ SubSubsystem_4:
 
 Time: 19
 SubSubsystem_4:
-        Resources: R1: 2 R2: 2
+        Resources: R1: 5 R2: 2
         Waiting Queue: []
         Ready Queue: []
         Core1:
