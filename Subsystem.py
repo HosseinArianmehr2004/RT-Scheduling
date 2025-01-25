@@ -240,6 +240,30 @@ class Subsystem_1(Subsystem):
         if self.time % 4 == 0:
             self.load_balancing()
 
+        # Handling starvation
+        temp_waiting_queue = []
+        if self.waiting_queue:
+            # Moving tasks from waiting queue to temp waiting queue
+            while self.waiting_queue:
+                task = self.waiting_queue.pop(0)
+                temp_waiting_queue.append(task)
+
+            # Insertion Sort
+            for i in range(len(temp_waiting_queue)):
+                key = temp_waiting_queue[i]
+                j = i - 1
+                while (
+                    j >= 0 and key.execution_time < temp_waiting_queue[j].execution_time
+                ):
+                    temp_waiting_queue[j + 1] = temp_waiting_queue[j]
+                    j -= 1
+                temp_waiting_queue[j + 1] = key
+
+            # Returning tasks from temp waiting queue to waiting queue
+            while temp_waiting_queue:
+                task = temp_waiting_queue.pop(0)
+                self.waiting_queue.append(task)
+
         # Check waiting queue and try to assign tasks
         for task in self.waiting_queue[:]:
             if self.allocate_resources(task):
@@ -507,6 +531,30 @@ class Subsystem_4(Subsystem):
         return status
 
     def execute(self):
+        # Handling starvation
+        temp_waiting_queue = []
+        if self.waiting_queue:
+            # Moving tasks from waiting queue to temp waiting queue
+            while self.waiting_queue:
+                task = self.waiting_queue.pop(0)
+                temp_waiting_queue.append(task)
+
+            # Insertion Sort
+            for i in range(len(temp_waiting_queue)):
+                key = temp_waiting_queue[i]
+                j = i - 1
+                while (
+                    j >= 0 and key.execution_time < temp_waiting_queue[j].execution_time
+                ):
+                    temp_waiting_queue[j + 1] = temp_waiting_queue[j]
+                    j -= 1
+                temp_waiting_queue[j + 1] = key
+
+            # Returning tasks from temp waiting queue to waiting queue
+            while temp_waiting_queue:
+                task = temp_waiting_queue.pop(0)
+                self.waiting_queue.append(task)
+
         # Moving tasks from waiting queue to ready queue
         if self.waiting_queue:
             for _ in self.waiting_queue:

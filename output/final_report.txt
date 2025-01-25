@@ -97,28 +97,28 @@ Task [T33] :
         Cores that executed the task are : [1]
 
 Task [T41] :
-        Start of execution time is : [7]
+        Start of execution time is : [6]
         Finish of execution time is : [10]
-        Time spent in the waiting queue is : [7]
+        Time spent in the waiting queue is : [6]
         The subsystem that executed the task is : [Subsystem 4]
         Cores that executed the task are : [1]
 
 Task [T42] :
         Start of execution time is : [1]
-        Finish of execution time is : [6]
+        Finish of execution time is : [5]
         Time spent in the waiting queue is : [0]
         The subsystem that executed the task is : [Subsystem 4]
         Cores that executed the task are : [1]
 
 Task [T43] :
         Start of execution time is : [2]
-        Finish of execution time is : [11]
+        Finish of execution time is : [10]
         Time spent in the waiting queue is : [0]
         The subsystem that executed the task is : [Subsystem 4]
         Cores that executed the task are : [2]
 
 Task [T44] :
-        Start of execution time is : [12]
+        Start of execution time is : [11]
         Finish of execution time is : [14]
         Time spent in the waiting queue is : [8]
         The subsystem that executed the task is : [Subsystem 4]
