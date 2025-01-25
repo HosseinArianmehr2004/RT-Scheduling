@@ -177,7 +177,7 @@ SubSubsystem_4:
         Core1:
                 Running Task: T42, remaining time: 2
         Core2:
-                Running Task: T43, remaining time: 5
+                Running Task: T43, remaining time: 6
 
 Time: 4
 SubSubsystem_1:
@@ -216,9 +216,9 @@ SubSubsystem_4:
         Waiting Queue: ['T44', 'T41']
         Ready Queue: []
         Core1:
-                Running Task: T42, remaining time: 2
+                Running Task: T42, remaining time: 1
         Core2:
-                Running Task: T43, remaining time: 4
+                Running Task: T43, remaining time: 5
 
 Time: 5
 SubSubsystem_1:
@@ -253,11 +253,11 @@ SubSubsystem_3:
 
 Time: 5
 SubSubsystem_4:
-        Resources: R1: 0 R2: 0
+        Resources: R1: 0 R2: 1
         Waiting Queue: ['T44', 'T41']
         Ready Queue: []
         Core1:
-                Running Task: T42, remaining time: 1
+                Running Task: ---, remaining time: -
         Core2:
                 Running Task: T43, remaining time: 4
 
@@ -341,7 +341,7 @@ SubSubsystem_4:
         Core1:
                 Running Task: ---, remaining time: -
         Core2:
-                Running Task: T43, remaining time: 3
+                Running Task: T43, remaining time: 2
 
 Time: 8
 SubSubsystem_1:
@@ -382,7 +382,7 @@ SubSubsystem_4:
         Core1:
                 Running Task: ---, remaining time: -
         Core2:
-                Running Task: T43, remaining time: 2
+                Running Task: T43, remaining time: 1
 
 Time: 9
 SubSubsystem_1:
@@ -462,7 +462,7 @@ SubSubsystem_4:
         Waiting Queue: ['T44']
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 3
+                Running Task: T41, remaining time: 2
         Core2:
                 Running Task: ---, remaining time: -
 
@@ -504,7 +504,7 @@ SubSubsystem_4:
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 3
+                Running Task: T41, remaining time: 1
         Core2:
                 Running Task: T44, remaining time: 2
 
@@ -541,11 +541,11 @@ SubSubsystem_3:
 
 Time: 12
 SubSubsystem_4:
-        Resources: R1: 2 R2: 0
+        Resources: R1: 4 R2: 1
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 2
+                Running Task: ---, remaining time: -
         Core2:
                 Running Task: T44, remaining time: 1
 
@@ -582,11 +582,11 @@ SubSubsystem_3:
 
 Time: 13
 SubSubsystem_4:
-        Resources: R1: 3 R2: 1
+        Resources: R1: 5 R2: 2
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 2
+                Running Task: ---, remaining time: -
         Core2:
                 Running Task: ---, remaining time: -
 
@@ -623,11 +623,11 @@ SubSubsystem_3:
 
 Time: 14
 SubSubsystem_4:
-        Resources: R1: 3 R2: 1
+        Resources: R1: 5 R2: 2
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 1
+                Running Task: ---, remaining time: -
         Core2:
                 Running Task: ---, remaining time: -
 
@@ -664,11 +664,11 @@ SubSubsystem_3:
 
 Time: 15
 SubSubsystem_4:
-        Resources: R1: 3 R2: 1
+        Resources: R1: 5 R2: 2
         Waiting Queue: []
         Ready Queue: []
         Core1:
-                Running Task: T41, remaining time: 1
+                Running Task: ---, remaining time: -
         Core2:
                 Running Task: ---, remaining time: -
 

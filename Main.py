@@ -298,9 +298,9 @@ def main():
     subsystem4.draw_gantt_chart()
 
     # Final report
-    with open(f"./output/final_report.txt", "w"):
+    with open(f"final_report.txt", "w"):
         pass
-    with open(f"./output/final_report.txt", "a") as final_report_file:
+    with open(f"final_report.txt", "a") as final_report_file:
         for task in tasks1:
             final_report_file.write(f"Task [{task.name}] :\n")
             final_report_file.write(
