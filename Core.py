@@ -10,28 +10,10 @@ class Core:
         self.subsystem = subsystem
         self.current_task = None
 
-        # For gantt chart
+        # For Gantt chart
         self.y_axis = []
         self.from_x = []
         self.to_x = []
-
-    def assign_task(self, task):
-        if self.current_task is None:
-            self.current_task = task
-            task.state = Task_State.RUNNING
-        else:
-            heapq.heappush(self.ready_queue, task)
-            task.state = Task_State.READY
-
-    def execute(self):
-        if self.current_task is not None:
-            self.current_task.remaining_time -= 1
-            if self.current_task.remaining_time == 0:
-                self.current_task.state = Task_State.READY
-                self.current_task = None
-                if self.ready_queue:
-                    next_task = heapq.heappop(self.ready_queue)
-                    self.assign_task(next_task)
 
 
 class Core_1(Core):

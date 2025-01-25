@@ -7,14 +7,17 @@ from Task import *
 from Core import *
 
 
-class Subsystem:
-    def __init__(self, id, resources):
+class Subsystem(threading.Thread):
+    def __init__(self, id, resources, main_system):
+        super().__init__()  # Correctly initialize the parent class
         self.id = id
         self.resources = resources
         self.ready_queue = []
 
         self.file = None
         self.time = None
+
+        self.main_system = main_system
 
     def get_status(self):
         status = f"Sub{self.id}:\n"
@@ -57,14 +60,6 @@ class Subsystem:
     def set_time(self, time):
         self.time = time
 
-    # def add_task(self, task):
-    #     if self.allocate_resources(task):
-    #         core = self.select_core()
-    #         core.assign_task(task)
-    #     else:
-    #         self.waiting_queue.append(task)
-    #         task.state = Task_State.WAITING
-
     def add_task(self, task):
         pass
 
@@ -100,10 +95,17 @@ class Subsystem:
         plt.savefig(f"figures/{self.id}_Core_{core.id}.png", bbox_inches="tight")
         # plt.close(fig)  # Close the figure to free up memory
 
+    def run(self):
+        while self.main_system.time < self.main_system.total_time:
+            with self.main_system.condition:
+                self.main_system.condition.wait()  # Wait for the main system to notify
+                print(f"{self.id} is synchronized at time: {self.main_system.time}")
+                self.execute()
+
 
 class Subsystem_1(Subsystem):
-    def __init__(self, id, num_cores, resources):
-        super().__init__(id, resources)
+    def __init__(self, id, num_cores, resources, main_system):
+        super().__init__(id, resources, main_system)
         self.waiting_queue = []
         self.cores = [Core_1(i, self) for i in range(num_cores)]
 
@@ -282,8 +284,8 @@ class Subsystem_1(Subsystem):
 
 
 class Subsystem_2(Subsystem):
-    def __init__(self, id, num_cores, resources):
-        super().__init__(id, resources)
+    def __init__(self, id, num_cores, resources, main_system):
+        super().__init__(id, resources, main_system)
         self.cores = [Core_2(i, self) for i in range(num_cores)]
         self.lock = threading.Lock()
 
@@ -361,8 +363,8 @@ class Subsystem_2(Subsystem):
 
 
 class Subsystem_3(Subsystem):
-    def __init__(self, id, num_cores, resources):
-        super().__init__(id, resources)
+    def __init__(self, id, num_cores, resources, main_system):
+        super().__init__(id, resources, main_system)
         self.waiting_queue = []
         self.cores = [Core_3(i, self) for i in range(num_cores)]
         self.lock = threading.Lock()
@@ -605,8 +607,8 @@ class Subsystem_3(Subsystem):
 
 
 class Subsystem_4(Subsystem):
-    def __init__(self, id, num_cores, resources):
-        super().__init__(id, resources)
+    def __init__(self, id, num_cores, resources, main_system):
+        super().__init__(id, resources, main_system)
         self.waiting_queue = []
         self.completed_tasks = []
         self.cores = [Core_4(i, self) for i in range(num_cores)]

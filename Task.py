@@ -24,23 +24,19 @@ class Task:
         self.execution_time = execution_time
         self.resources_needed = resources_needed
         self.arrival_time = arrival_time
-
         self.destination_CPU_number = destination_CPU_number
-
         self.period = period
-        self.backup_period = period
-
         self.number_of_repeat_times = number_of_repeat_times
         self.prerequisite_task_name = prerequisite_task_name
 
-        self.state = Task_State.READY
         self.remaining_time = execution_time
+        self.remaining_quantum = 0
+        self.backup_period = period
+        self.prerequisite = False
 
+        self.state = None
         self.has_all_resources = False
         self.has_Ri = {"R1": False, "R2": False}
-
-        self.remaining_quantum = 0
-        self.prerequisite = False
 
         # For final report
         self.start_execution_time = None
